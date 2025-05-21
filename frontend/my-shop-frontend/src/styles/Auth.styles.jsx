@@ -4,10 +4,7 @@ export const authStyles = {
     flex 
     items-center 
     justify-center 
-    bg-gradient-to-r 
-    from-indigo-500 
-    via-purple-500 
-    to-pink-500 
+    bg-white
     py-12 
     px-4 
     sm:px-6 
@@ -16,68 +13,80 @@ export const authStyles = {
   
   card: `
     bg-white 
-    rounded-2xl 
-    shadow-xl 
+    rounded-lg
+    shadow-md
+    border
+    border-gray-100
     w-full 
     max-w-md 
-    p-8 
-    space-y-8
+    p-8
+    space-y-6
   `,
 
   logo: `
     mx-auto 
-    h-12 
+    h-12
     w-auto
   `,
 
   title: `
-    mt-6 
+    mt-8
     text-center 
-    text-3xl 
-    font-extrabold 
-    text-gray-900
+    text-2xl
+    font-bold
+    text-gray-800
   `,
 
   subtitle: `
-    mt-2 
+    mt-3
+    mb-6
     text-center 
     text-sm 
-    text-gray-600
+    text-gray-500
   `,
 
   form: `
-    mt-8 
-    space-y-6
+    space-y-5
   `,
 
   inputGroup: `
-    -space-y-px 
-    rounded-md 
-    shadow-sm
+    space-y-5
+  `,
+
+  formField: `
+    mb-5
+  `,
+
+  label: `
+    block 
+    text-sm 
+    font-medium 
+    text-gray-700 
+    mb-2
   `,
 
   input: `
     appearance-none 
-    relative 
     block 
     w-full 
-    px-3 
+    px-4 
     py-3 
     border 
-    border-gray-300 
-    placeholder-gray-500 
-    text-gray-900 
-    rounded-md 
+    border-gray-200
+    rounded-md
+    text-gray-700
+    bg-white
+    placeholder-gray-400
     focus:outline-none 
-    focus:ring-indigo-500 
-    focus:border-indigo-500 
-    focus:z-10 
-    sm:text-sm
+    focus:ring-1
+    focus:ring-blue-500 
+    focus:border-blue-500 
+    transition
+    duration-150
+    text-sm
   `,
 
   button: `
-    group 
-    relative 
     w-full 
     flex 
     justify-center 
@@ -85,39 +94,68 @@ export const authStyles = {
     px-4 
     border 
     border-transparent 
-    text-sm 
+    rounded-md
     font-medium 
-    rounded-md 
     text-white 
-    bg-indigo-600 
-    hover:bg-indigo-700 
+    bg-blue-600 
+    hover:bg-blue-500 
     focus:outline-none 
     focus:ring-2 
     focus:ring-offset-2 
-    focus:ring-indigo-500
-    transition-colors
-    duration-200
+    focus:ring-blue-500
+    transition
+    duration-150
+    text-sm
+    mt-8
   `,
 
   link: `
     font-medium 
-    text-indigo-600 
-    hover:text-indigo-500
-    transition-colors
-    duration-200
+    text-blue-600 
+    hover:text-blue-500
+    ml-1
   `,
 
   errorMessage: `
-    rounded-md 
+    rounded-md
     bg-red-50 
     p-4 
-    mb-4
+    mb-5
+    border
+    border-red-100
+    text-red-600
   `,
 
   successMessage: `
-    rounded-md 
+    rounded-md
     bg-green-50 
     p-4 
-    mb-4
+    mb-5
+    border
+    border-green-100
+    text-green-600
+  `,
+
+  divider: `
+    my-6
+    relative
+    flex
+    items-center
+    justify-center
+  `,
+
+  dividerLine: `
+    w-full
+    border-t
+    border-gray-200
+  `,
+
+  dividerText: `
+    px-3
+    text-sm
+    text-gray-500
+    bg-white
+    relative
+    z-10
   `,
 } 

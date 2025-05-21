@@ -31,14 +31,14 @@ export default function Register() {
     
     // 验证密码
     if (formData.password !== formData.confirmPassword) {
-      setError('两次输入的密码不一致')
+      setError('Passwords do not match')
       return
     }
 
     // 验证密码强度
     const passwordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z]).*$/
     if (!passwordRegex.test(formData.password)) {
-      setError('密码必须包含至少一个字母和一个数字')
+      setError('Password must contain at least one letter and one number')
       return
     }
 
@@ -55,10 +55,10 @@ export default function Register() {
       })
       // 注册成功后跳转到登录页
       navigate('/login', { 
-        state: { message: '注册成功，请登录' }
+        state: { message: 'Registration successful, please login' }
       })
     } catch (err) {
-      setError(err.message || '注册失败，请稍后重试')
+      setError(err.message || 'Registration failed, please try again later')
     } finally {
       setLoading(false)
     }
@@ -67,170 +67,168 @@ export default function Register() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <div>
-          <img
-            className={styles.logo}
-            src="/logo.png"
-            alt="Logo"
-          />
-          <h2 className={styles.title}>
-            注册新账户
-          </h2>
-          <p className={styles.subtitle}>
-            加入我们，开启购物之旅
-          </p>
-        </div>
+        <img
+          className={styles.logo}
+          src="/logo.svg"
+          alt="E-Shop Logo"
+        />
+        <h2 className={styles.title}>Create new account</h2>
+        <p className={styles.subtitle}>Join us and start shopping</p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
           {error && (
             <div className={styles.errorMessage}>
-              <div className="text-sm text-red-700">{error}</div>
+              <div className="text-sm">{error}</div>
             </div>
           )}
           
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                用户名
-              </label>
-              <div className="mt-1">
+          <div className={styles.inputGroup}>
+            <div className={styles.formField}>
+              <label htmlFor="username" className={styles.label}>Username</label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                value={formData.username}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="Enter your username"
+                disabled={loading}
+              />
+            </div>
+
+            <div className={styles.formField}>
+              <label htmlFor="email" className={styles.label}>Email address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="Enter your email"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="firstName" className={styles.label}>First name</label>
                 <input
-                  id="username"
-                  name="username"
+                  id="firstName"
+                  name="firstName"
                   type="text"
-                  required
-                  value={formData.username}
+                  value={formData.firstName}
                   onChange={handleChange}
                   className={styles.input}
-                  placeholder="请输入用户名"
+                  placeholder="First name"
+                  disabled={loading}
                 />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                邮箱地址
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={styles.input}
-                  placeholder="请输入邮箱"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  名字
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className={styles.input}
-                    placeholder="名字"
-                  />
-                </div>
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  姓氏
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className={styles.input}
-                    placeholder="姓氏"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                手机号码
-              </label>
-              <div className="mt-1">
+                <label htmlFor="lastName" className={styles.label}>Last name</label>
                 <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={formData.phone}
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  value={formData.lastName}
                   onChange={handleChange}
                   className={styles.input}
-                  placeholder="请输入手机号码"
+                  placeholder="Last name"
+                  disabled={loading}
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                密码
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={styles.input}
-                  placeholder="请输入密码（至少6位，包含字母和数字）"
-                />
-              </div>
+            <div className={styles.formField}>
+              <label htmlFor="phone" className={styles.label}>Phone number</label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="Enter your phone number"
+                disabled={loading}
+              />
             </div>
 
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                确认密码
-              </label>
-              <div className="mt-1">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={styles.input}
-                  placeholder="请再次输入密码"
-                />
-              </div>
+            <div className={styles.formField}>
+              <label htmlFor="password" className={styles.label}>Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="Enter password (at least 6 characters, including letters and numbers)"
+                disabled={loading}
+              />
+            </div>
+
+            <div className={styles.formField}>
+              <label htmlFor="confirmPassword" className={styles.label}>Confirm password</label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="Confirm your password"
+                disabled={loading}
+              />
             </div>
           </div>
 
-          <div className="mt-6">
-            <button
-              type="submit"
-              disabled={loading}
-              className={`${styles.button} ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              {loading ? '注册中...' : '注册'}
-            </button>
+          <div className="flex items-center mt-4">
+            <input
+              id="agree-terms"
+              name="agree-terms"
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              required
+            />
+            <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-700">
+              I have read and agree to the <a href="#" className="text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" className="text-blue-600 hover:text-blue-500">Privacy Policy</a>
+            </label>
           </div>
 
-          <div className="flex items-center justify-center mt-6">
-            <div className="text-sm">
-              已有账户？
+          <button
+            type="submit"
+            disabled={loading}
+            className={styles.button}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Registering...
+              </span>
+            ) : 'Register'}
+          </button>
+
+          <div className={styles.divider}>
+            <div className={styles.dividerLine}></div>
+            <span className={styles.dividerText}>or</span>
+            <div className={styles.dividerLine}></div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600">
+              Already have an account?
               <Link to="/login" className={styles.link}>
-                立即登录
+                Sign in now
               </Link>
-            </div>
+            </p>
           </div>
         </form>
       </div>

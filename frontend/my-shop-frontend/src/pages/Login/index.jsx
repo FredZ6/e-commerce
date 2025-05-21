@@ -28,7 +28,7 @@ export default function Login() {
     setSuccessMessage('')
     
     if (!username || !password) {
-      setError('请输入用户名和密码')
+      setError('Please enter username and password')
       return
     }
     
@@ -46,7 +46,7 @@ export default function Login() {
       }
     } catch (err) {
       console.error('Login error:', err)
-      setError(err.message || '登录失败，请检查用户名和密码')
+      setError(err.message || 'Login failed, please check your username and password')
     } finally {
       setLoading(false)
     }
@@ -55,37 +55,30 @@ export default function Login() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <div>
-          <img
-            className={styles.logo}
-            src="/logo.png"
-            alt="Logo"
-          />
-          <h2 className={styles.title}>
-            登录账户
-          </h2>
-          <p className={styles.subtitle}>
-            欢迎回来！请登录您的账户
-          </p>
-        </div>
+        <img
+          className={styles.logo}
+          src="/logo.svg"
+          alt="E-Shop Logo"
+        />
+        <h2 className={styles.title}>Sign in to your account</h2>
+        <p className={styles.subtitle}>Welcome back! Please sign in to your account</p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
           {error && (
             <div className={styles.errorMessage}>
-              <div className="text-sm text-red-700">{error}</div>
+              <div className="text-sm">{error}</div>
             </div>
           )}
+          
           {successMessage && (
             <div className={styles.successMessage}>
-              <div className="text-sm text-green-700">{successMessage}</div>
+              <div className="text-sm">{successMessage}</div>
             </div>
           )}
 
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                用户名
-              </label>
+          <div className={styles.inputGroup}>
+            <div className={styles.formField}>
+              <label htmlFor="username" className={styles.label}>Username</label>
               <input
                 id="username"
                 name="username"
@@ -94,14 +87,13 @@ export default function Login() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className={styles.input}
-                placeholder="请输入用户名"
+                placeholder="Enter your username"
+                disabled={loading}
               />
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                密码
-              </label>
+            <div className={styles.formField}>
+              <label htmlFor="password" className={styles.label}>Password</label>
               <input
                 id="password"
                 name="password"
@@ -110,28 +102,60 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={styles.input}
-                placeholder="请输入密码"
+                placeholder="Enter your password"
+                disabled={loading}
               />
             </div>
           </div>
 
-          <div className="mt-6">
-            <button
-              type="submit"
-              disabled={loading}
-              className={`${styles.button} ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              {loading ? '登录中...' : '登录'}
-            </button>
+          <div className="flex items-center justify-between mt-5">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                Remember me
+              </label>
+            </div>
+            <div className="text-sm">
+              <a href="#" className="text-sm text-blue-600 hover:text-blue-500">
+                Forgot password?
+              </a>
+            </div>
           </div>
 
-          <div className="flex items-center justify-center mt-6">
-            <div className="text-sm">
-              还没有账户？
+          <button
+            type="submit"
+            disabled={loading}
+            className={styles.button}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Signing in...
+              </span>
+            ) : 'Login'}
+          </button>
+          
+          <div className={styles.divider}>
+            <div className={styles.dividerLine}></div>
+            <span className={styles.dividerText}>or</span>
+            <div className={styles.dividerLine}></div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?
               <Link to="/register" className={styles.link}>
-                立即注册
+                Sign up now
               </Link>
-            </div>
+            </p>
           </div>
         </form>
       </div>
