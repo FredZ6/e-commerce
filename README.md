@@ -104,7 +104,6 @@ Stop all services:
 ```bash
 docker compose down
 ```
-
 ## Quality Checks
 
 Run the same checks that CI executes before pushing:
@@ -130,7 +129,6 @@ GitHub Actions workflow is defined at `.github/workflows/ci.yml` and runs:
 
 - Architecture summary: `docs/architecture.md`
 - Resume bullets: `docs/resume-bullets.md`
-
 ## Security
 
 - JWT for user authentication
