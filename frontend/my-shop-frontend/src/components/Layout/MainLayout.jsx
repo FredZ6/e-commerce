@@ -19,7 +19,12 @@ export default function MainLayout({ children }) {
     { name: 'Products', href: '/products' },
     { name: 'Cart', href: '/cart', protected: true, badge: totalItems },
     { name: 'Orders', href: '/orders', protected: true },
-    ...(isAdmin ? [{ name: 'Admin', href: '/admin/products', admin: true }] : []),
+    ...(isAdmin
+      ? [
+          { name: 'Product Management', href: '/admin/products', admin: true },
+          { name: 'Order Management', href: '/admin/orders', admin: true },
+        ]
+      : []),
   ]
 
   const visibleNavigation = navigation

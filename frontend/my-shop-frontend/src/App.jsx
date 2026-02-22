@@ -15,6 +15,7 @@ import { ToastProvider } from './components/common/Toast'
 import { ConfirmProvider } from './components/common/ConfirmDialog'
 import AdminProducts from './pages/Admin/Products'
 import Checkout from './pages/Checkout'
+import AdminOrders from './pages/Admin/Orders'
 
 function App() {
   return (
@@ -96,6 +97,16 @@ function App() {
                     <PrivateRoute requiredRole="ADMIN">
                       <MainLayout>
                         <AdminProducts />
+                      </MainLayout>
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/admin/orders"
+                  element={
+                    <PrivateRoute requiredRole="ADMIN">
+                      <MainLayout>
+                        <AdminOrders />
                       </MainLayout>
                     </PrivateRoute>
                   }
