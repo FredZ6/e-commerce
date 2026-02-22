@@ -19,9 +19,9 @@ public class JwtResponse {
     private String username;
     private String email;
     private List<String> roles;
-    private Long expiresIn;  // token
+    private Long expiresIn;  // token过期时间（秒）
     
-    // 
+    // 快速构造方法
     public static JwtResponse of(String token, Long id, String username, String email, List<String> roles, Long expiresIn) {
         return JwtResponse.builder()
                 .token(token)

@@ -29,7 +29,7 @@ public class CartController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    // 
+    // 获取购物车中的商品
     @GetMapping
     public ResponseEntity<List<CartItem>> getCartItems(@RequestHeader("Authorization") String token) {
         User user = getUserFromToken(token);
@@ -37,7 +37,7 @@ public class CartController {
         return ResponseEntity.ok(cartItems);
     }
 
-    // 
+    // 添加商品到购物车
     @PostMapping
     public ResponseEntity<CartItem> addCartItem(
             @RequestHeader("Authorization") String token,
@@ -48,7 +48,7 @@ public class CartController {
         return ResponseEntity.ok(cartItem);
     }
 
-    // 
+    // 更新购物车项
     @PutMapping("/{cartItemId}")
     public ResponseEntity<?> updateCartItemQuantity(
             @RequestHeader("Authorization") String token,
@@ -63,7 +63,7 @@ public class CartController {
         }
     }
 
-    // 
+    // 删除购物车项
     @DeleteMapping("/{cartItemId}")
     public ResponseEntity<?> deleteCartItem(
             @RequestHeader("Authorization") String token,
@@ -73,7 +73,7 @@ public class CartController {
         return ResponseEntity.ok("Cart item deleted successfully");
     }
 
-    // 
+    // 清空购物车
     @DeleteMapping("/clear")
     public ResponseEntity<?> clearCart(@RequestHeader("Authorization") String token) {
         User user = getUserFromToken(token);
@@ -81,7 +81,7 @@ public class CartController {
         return ResponseEntity.ok("Cart cleared successfully");
     }
 
-    // 
+    // 从令牌中获取用户信息
     private User getUserFromToken(String token) {
         String username = jwtTokenUtil.getUsernameFromToken(token.substring(7));
         return userService.findByUsername(username);

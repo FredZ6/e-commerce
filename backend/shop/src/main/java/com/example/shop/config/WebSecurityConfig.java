@@ -28,8 +28,12 @@ public class WebSecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                .requestMatchers("/api/products/**").hasRole("ADMIN")
-                .requestMatchers("/api/auth/**", "/api/users/register", "/api/users/login").permitAll()
+                .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                .requestMatchers("/api/orders/admin/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                .requestMatchers("/api/cart/**", "/api/orders/**", "/api/users/me").authenticated()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

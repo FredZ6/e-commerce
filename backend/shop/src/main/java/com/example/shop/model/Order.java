@@ -25,11 +25,11 @@ import java.time.LocalDateTime;
 public class Order {
 
     public enum OrderStatus {
-        PENDING,    // 
-        PAID,       // 
-        SHIPPED,    // 
-        COMPLETED,  // 
-        CANCELLED   // 
+        PENDING,    // 待支付
+        PAID,       // 已支付
+        SHIPPED,    // 已发货
+        COMPLETED,  // 已完成
+        CANCELLED   // 已取消
     }
 
     @Id

@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
 
-        //  JWT Token 
+        // 检查 JWT Token 是否存在且格式正确
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
@@ -60,7 +60,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             log.debug("JWT Token does not begin with Bearer String");
         }
 
-        //  token
+        // 验证 token
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
                 UserDetails userDetails = userService.loadUserByUsername(username);

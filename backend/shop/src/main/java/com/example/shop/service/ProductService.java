@@ -19,27 +19,27 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    // 
+    // 获取所有商品
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    // ID
+    // 根据ID获取商品
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
-    // 
+    // 添加新商品（管理员功能，可选）
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
 
-    // 
+    // 更新商品信息（管理员功能，可选）
     public Product updateProduct(Long id, Product productDetails) {
         Product existingProduct = getProductById(id);
         
-        // null
+        // 只更新非null的字段
         if (productDetails.getName() != null) {
             existingProduct.setName(productDetails.getName());
         }
@@ -52,11 +52,17 @@ public class ProductService {
         if (productDetails.getImageUrl() != null) {
             existingProduct.setImageUrl(productDetails.getImageUrl());
         }
+        if (productDetails.getStock() != null) {
+            existingProduct.setStock(productDetails.getStock());
+        }
+        if (productDetails.getDetails() != null) {
+            existingProduct.setDetails(productDetails.getDetails());
+        }
 
         return productRepository.save(existingProduct);
     }
 
-    // 
+    // 删除商品（管理员功能，可选）
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
         productRepository.delete(product);

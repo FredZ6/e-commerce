@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    // 
+    // 根据用户查找订单列表
     List<Order> findByUser(User user);
 
-    //  JOIN FETCH  orderItems
+    // 添加新的查询方法，使用 JOIN FETCH 预加载 orderItems
     @Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.orderItems WHERE o.user = :user")
     List<Order> findOrdersWithItemsByUser(@Param("user") User user);
 }

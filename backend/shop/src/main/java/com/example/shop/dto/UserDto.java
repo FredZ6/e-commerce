@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
- * 
+ * 用户数据传输对象，用于用户注册和登录请求
  */
 @Data
 @NoArgsConstructor
@@ -43,7 +43,7 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    // 
+    // 可选字段
     @Size(max = 50)
     private String firstName;
 
@@ -55,7 +55,7 @@ public class UserDto {
 
     private String avatar;
     
-    // 
+    // 创建时间和更新时间（只读）
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String createdAt;
@@ -64,7 +64,7 @@ public class UserDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String updatedAt;
 
-    // 
+    // 用于确认密码的字段（仅用于注册）
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassword;
 

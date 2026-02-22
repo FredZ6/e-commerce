@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    // 
+    // 根据用户查找购物车
     Optional<Cart> findByUser(User user);
 }

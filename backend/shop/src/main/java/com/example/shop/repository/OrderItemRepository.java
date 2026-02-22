@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
-    // 
+    // 根据订单查找订单项列表
     List<OrderItem> findByOrder(Order order);
 
     @Query("SELECT oi FROM OrderItem oi JOIN FETCH oi.product WHERE oi.order.id = :orderId")

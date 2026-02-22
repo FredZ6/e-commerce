@@ -32,15 +32,15 @@ public class UserController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    // 
+    // 用户注册
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto) {
-        // 
+        // 验证密码确认
         if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
             return ResponseEntity.badRequest().body("Password confirmation doesn't match");
         }
 
-        //  User 
+        // 创建 User 对象
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
@@ -49,20 +49,20 @@ public class UserController {
         user.setLastName(userDto.getLastName());
         user.setPhone(userDto.getPhone());
         
-        // USER
+        // 设置角色，如果没有指定则默认为USER
         String role = userDto.getRole() != null ? userDto.getRole() : "USER";
         if (!role.equals("USER") && !role.equals("ADMIN")) {
             return ResponseEntity.badRequest().body("Invalid role");
         }
         user.setRole(role);
         
-        // 
+        // 注册用户
         User registeredUser = userService.registerUser(user);
         
-        //  JWT 
+        // 生成 JWT 令牌
         String token = jwtTokenUtil.generateToken(registeredUser);
         
-        // 
+        // 构建响应
         return ResponseEntity.ok(JwtResponse.builder()
                 .token(token)
                 .type("Bearer")
@@ -74,11 +74,11 @@ public class UserController {
                 .build());
     }
 
-    // 
+    // 用户登录
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody UserDto userDto) {
         try {
-            // 
+            // 进行身份验证
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             userDto.getUsername(),
@@ -89,11 +89,11 @@ public class UserController {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
 
-        // 
+        // 获取用户信息并生成令牌
         final User user = userService.findByUsername(userDto.getUsername());
         final String token = jwtTokenUtil.generateToken(user);
 
-        // 
+        // 构建响应
         return ResponseEntity.ok(JwtResponse.builder()
                 .token(token)
                 .type("Bearer")
@@ -105,7 +105,7 @@ public class UserController {
                 .build());
     }
 
-    // 
+    // 获取当前用户信息
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String token) {
         if (token != null && token.startsWith("Bearer ")) {
@@ -113,7 +113,7 @@ public class UserController {
             String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             User user = userService.findByUsername(username);
             
-            //  UserDto
+            // 转换为 UserDto
             UserDto userDto = UserDto.builder()
                     .id(user.getId())
                     .username(user.getUsername())
@@ -133,7 +133,7 @@ public class UserController {
     }
 
     @PostMapping("/register/admin")
-    @PreAuthorize("hasRole('ADMIN')")  // 
+    @PreAuthorize("hasRole('ADMIN')")  // 只有管理员才能注册新管理员
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody UserDto userDto) {
         userDto.setRole("ADMIN");
         return registerUser(userDto);
