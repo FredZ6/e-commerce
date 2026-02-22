@@ -4,10 +4,20 @@ import { logout as authLogout } from '../services/auth'
 
 const AuthContext = createContext(null)
 
+const normalizeRoles = (userData) => {
+  if (!userData) return []
+  if (Array.isArray(userData.roles)) return userData.roles
+  if (typeof userData.role === 'string') {
+    return [userData.role.startsWith('ROLE_') ? userData.role : `ROLE_${userData.role}`]
+  }
+  return []
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [roles, setRoles] = useState([])
 
   useEffect(() => {
     const initAuth = () => {
@@ -16,8 +26,10 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token')
         
         if (storedUser && token) {
-          setUser(JSON.parse(storedUser))
+          const parsedUser = JSON.parse(storedUser)
+          setUser(parsedUser)
           setIsAuthenticated(true)
+          setRoles(normalizeRoles(parsedUser))
         }
       } catch (error) {
         console.error('Failed to initialize auth state:', error)
@@ -34,6 +46,7 @@ export const AuthProvider = ({ children }) => {
   const updateUser = (userData) => {
     setUser(userData)
     setIsAuthenticated(!!userData)
+    setRoles(normalizeRoles(userData))
   }
 
   // Logout
@@ -41,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     authLogout()
     setUser(null)
     setIsAuthenticated(false)
+    setRoles([])
   }
 
   const value = {
@@ -48,7 +62,8 @@ export const AuthProvider = ({ children }) => {
     setUser: updateUser,
     isAuthenticated,
     loading,
-    logout
+    roles,
+    logout,
   }
 
   if (loading) {

@@ -2,8 +2,8 @@ import { Navigate, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useAuth } from '../contexts/AuthContext'
 
-export default function PrivateRoute({ children, requiredRole }) {
-  const { user, isAuthenticated, loading } = useAuth()
+export default function PrivateRoute({ children, requiredRole = null }) {
+  const { isAuthenticated, loading, roles } = useAuth()
   const location = useLocation()
 
   // Show loading state while auth status is being initialized.
@@ -21,7 +21,7 @@ export default function PrivateRoute({ children, requiredRole }) {
   }
 
   // Redirect to products when required role is missing.
-  if (requiredRole && (!user.roles || !user.roles.includes(`ROLE_${requiredRole}`))) {
+  if (requiredRole && !roles.includes(`ROLE_${requiredRole}`)) {
     return <Navigate to="/products" replace />
   }
 
@@ -32,7 +32,3 @@ PrivateRoute.propTypes = {
   children: PropTypes.node.isRequired,
   requiredRole: PropTypes.string
 }
-
-PrivateRoute.defaultProps = {
-  requiredRole: null
-} 
