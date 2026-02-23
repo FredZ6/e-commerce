@@ -5,13 +5,18 @@
 
 This is an e-commerce shop project built with Spring Boot for the backend API and React for the frontend interface.
 
-## Live Demo
+## Demo Access
 
-- Frontend: `TBD`
-- Backend API: `TBD`
-- Demo user: `TBD`
-
-Note: after deploying this repository to cloud, update these links and credentials.
+- Local frontend (Docker default): `http://localhost:5173`
+- Local backend API (Docker default): `http://localhost:8080/api/products`
+- Admin login (created automatically when DB is empty):
+  - Username: `admin`
+  - Password: `Admin123@`
+- Shopper login:
+  - Register a user from `http://localhost:5173/register`, then sign in.
+- Public cloud demo URL:
+  - This project is cost-safe by design (no always-on public environment).
+  - Use `manual-demo-deploy` workflow to create a temporary public URL and record it in `docs/deploy-proof-template.md`.
 
 ## Project Structure
 
@@ -163,6 +168,21 @@ Critical E2E workflow is defined at `.github/workflows/e2e.yml` and runs:
 - Playwright critical flows:
   - register -> login -> add to cart -> place order
   - admin updates order status -> user sees status change
+
+## Results (Measured)
+
+- Automated tests: **39 total** (`29` backend JUnit + `10` frontend/E2E via Vitest + Playwright).
+- Workflows: **4 total** (`CI`, `E2E`, `manual-demo-deploy`, `manual-demo-destroy`).
+- Coverage gates (enforced in CI):
+  - Frontend: lines/functions/statements >= `40%`, branches >= `30%`
+  - Backend JaCoCo: line >= `50%`, branch >= `30%`
+- Performance baseline (2026-02-23, `200` requests, concurrency `10`):
+  - `GET /api/products`: P95 `0.021s`, throughput `88.09 req/s`
+  - `GET /actuator/health`: P95 `0.014s`, throughput `142.34 req/s`
+- Security baseline:
+  - Login abuse protection (attempt window + temporary block)
+  - Admin-only actuator metrics endpoint
+  - Role-protected admin order and product write operations
 
 ## Manual Cloud Deployment (Cost-safe)
 

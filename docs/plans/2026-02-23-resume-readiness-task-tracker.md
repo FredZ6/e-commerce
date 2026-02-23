@@ -18,7 +18,7 @@ Startup rule:
 | 3 | Observability (logs/metrics/health) | Completed | `c6585a6` |
 | 4 | Replace external images with controllable assets | Completed | `1656c19`, `8584840`, `639adab` |
 | 5 | Performance + security baseline | Completed | `3342745`, `1bba829`, `326ee81` |
-| 6 | Rewrite README + quantified resume bullets | Partially Completed | `13f5392`, `bca9592`, `2c6d52c` |
+| 6 | Rewrite README + quantified resume bullets | Completed | `13f5392`, `bca9592`, `2c6d52c`, `f224417` |
 
 ## Task 1 - One-Click Demo Deploy Proof
 
@@ -72,15 +72,12 @@ Done:
 
 ## Task 6 - README and Resume Bullets (Quantified)
 
-Status: Partially Completed
+Status: Completed
 
 Done:
-- `docs/resume-bullets.md` is quantified and interview-ready.
-- README contains architecture/stack/quality/deploy sections.
-
-Remaining:
-- Replace `TBD` live demo fields in README with actual URLs and credentials (when deployed).
-- Add one short "results" section with measurable outcomes (tests, CI, deployment mode).
+- `docs/resume-bullets.md` refreshed with quantified, interview-ready outcomes.
+- README now includes concrete demo access details (local URLs + credentials + on-demand cloud note).
+- README now includes a measured "Results" section (tests, workflows, coverage gates, and performance baseline).
 
 ## Notes
 
