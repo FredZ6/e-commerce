@@ -10,7 +10,7 @@ export const getProductById = async (id) => {
   return response.data
 }
 
-// 管理员接口
+// Admin endpoints
 export const addProduct = async (productData) => {
   const response = await api.post('/products/add', productData)
   return response.data

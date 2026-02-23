@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { CartContext } from './context'
 import { getCartItems } from '../../services/cart'
@@ -18,15 +18,18 @@ export function CartProvider({ children }) {
   const [error, setError] = useState(null)
   const { user } = useAuth()
 
-  // 获取购物车商品
-  const fetchCartItems = async () => {
+  // Fetch cart items.
+  const fetchCartItems = useCallback(async () => {
     if (!user) {
       setCartItems([])
+      setError(null)
       setLoading(false)
       return
     }
 
     try {
+      setLoading(true)
+      setError(null)
       const data = await getCartItems()
       setCartItems(data)
     } catch (err) {
@@ -34,12 +37,12 @@ export function CartProvider({ children }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
-  // 当用户登录状态改变时重新获取购物车
+  // Refetch cart when authentication user changes.
   useEffect(() => {
     fetchCartItems()
-  }, [user])
+  }, [fetchCartItems])
 
   const value = {
     cartItems,
@@ -47,7 +50,11 @@ export function CartProvider({ children }) {
     error,
     refreshCart: fetchCartItems,
     totalItems: cartItems.reduce((sum, item) => sum + item.quantity, 0),
-    totalPrice: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    totalPrice: cartItems.reduce((sum, item) => {
+      const unitPrice = Number(item?.product?.price ?? item?.price ?? 0)
+      const quantity = Number(item?.quantity ?? 0)
+      return sum + unitPrice * quantity
+    }, 0),
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

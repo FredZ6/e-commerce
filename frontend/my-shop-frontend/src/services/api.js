@@ -1,16 +1,16 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8080/api'
+const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // 允许跨域请求携带凭证
+  withCredentials: true,
 })
 
-// 请求拦截器：添加 token
+// Request interceptor: attach auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token')
@@ -24,7 +24,7 @@ api.interceptors.request.use(
   }
 )
 
-// 响应拦截器
+// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -33,7 +33,7 @@ api.interceptors.response.use(
       localStorage.removeItem('user')
       window.location.href = '/login'
     }
-    return Promise.reject(error.response?.data || { message: '请求失败' })
+    return Promise.reject(error.response?.data || { message: 'Request failed' })
   }
 )
 

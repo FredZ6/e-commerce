@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
+import { Fragment } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, UserCircleIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 import { useCart } from '../../contexts/CartContext'
-import { Fragment } from 'react'
 
 export default function MainLayout({ children }) {
   const location = useLocation()
@@ -19,11 +19,19 @@ export default function MainLayout({ children }) {
     { name: 'Products', href: '/products' },
     { name: 'Cart', href: '/cart', protected: true, badge: totalItems },
     { name: 'Orders', href: '/orders', protected: true },
-    // Admin menu
-    ...(isAdmin ? [
-      { name: 'Product Management', href: '/admin/products', admin: true },
-    ] : [])
+    ...(isAdmin ? [{ name: 'Admin', href: '/admin/products', admin: true }] : []),
   ]
+
+  const visibleNavigation = navigation
+    .filter((item) => !item.protected || isAuthenticated)
+    .filter((item) => !item.admin || isAdmin)
+
+  const isRouteActive = (href) => {
+    if (href === '/') {
+      return location.pathname === '/'
+    }
+    return location.pathname === href || location.pathname.startsWith(`${href}/`)
+  }
 
   const handleLogout = () => {
     logout()
@@ -31,232 +39,196 @@ export default function MainLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Disclosure as="nav" className="bg-white border-b border-gray-100">
+    <div className="min-h-screen bg-transparent">
+      <div className="border-b border-[color:var(--brand-line)] bg-[color:var(--brand-paper)]/65 py-2">
+        <div className="page-shell flex items-center justify-between text-xs uppercase tracking-[0.15em] text-[color:var(--brand-muted)]">
+          <span>Editor&apos;s Choice This Week</span>
+          <span className="hidden sm:inline">Worldwide Shipping Available</span>
+        </div>
+      </div>
+
+      <Disclosure as="nav" className="sticky top-0 z-40 border-b border-[color:var(--brand-line)] bg-white/80 backdrop-blur">
         {({ open }) => (
           <>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between h-16">
-                <div className="flex">
-                  <Link to="/" className="flex items-center flex-shrink-0">
-                    <img
-                      className="h-8 w-auto"
-                      src="/logo.svg"
-                      alt="E-Shop"
-                    />
-                    <span className="ml-2 text-lg font-medium text-gray-900">E-Shop</span>
+            <div className="page-shell">
+              <div className="flex h-20 items-center justify-between gap-4">
+                <div className="flex items-center gap-8">
+                  <Link to="/" className="flex items-center gap-3">
+                    <img className="h-10 w-auto" src="/logo.svg" alt="E-Shop" />
+                    <div>
+                      <p className="text-xl font-semibold leading-none">E-Shop</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-[color:var(--brand-muted)]">
+                        Curated Market
+                      </p>
+                    </div>
                   </Link>
-                  <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
-                    {navigation
-                      .filter(item => !item.protected || isAuthenticated)
-                      .filter(item => !item.admin || isAdmin)
-                      .map((item) => (
+
+                  <div className="hidden items-center gap-2 md:flex">
+                    {visibleNavigation.map((item) => {
+                      const active = isRouteActive(item.href)
+                      return (
                         <Link
                           key={item.name}
                           to={item.href}
-                          className={`inline-flex items-center h-16 px-1 pt-1 text-sm font-medium ${
-                            location.pathname === item.href || location.pathname.startsWith(`${item.href}/`)
-                              ? 'border-b-2 border-blue-500 text-gray-900'
-                              : 'text-gray-500 hover:text-gray-700 hover:border-b-2 hover:border-gray-300'
+                          className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                            active
+                              ? 'bg-[color:var(--brand-accent-soft)] text-[color:var(--brand-accent)]'
+                              : 'text-[color:var(--brand-muted)] hover:bg-[color:var(--brand-paper)] hover:text-[color:var(--brand-ink)]'
                           }`}
                         >
                           {item.name}
                           {item.badge > 0 && (
-                            <span className="ml-1 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                            <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--brand-accent)] px-1.5 text-[10px] font-bold text-white">
                               {item.badge}
                             </span>
                           )}
                         </Link>
-                      ))}
+                      )
+                    })}
                   </div>
                 </div>
-                
-                <div className="hidden sm:flex sm:items-center sm:ml-6">
+
+                <div className="hidden items-center gap-3 md:flex">
                   {isAuthenticated ? (
-                    <Menu as="div" className="relative ml-3">
-                      <div className="flex items-center">
-                        {totalItems > 0 && (
-                          <Link to="/cart" className="relative p-1 mr-3 rounded-full text-gray-500 hover:text-gray-600 hover:bg-gray-100">
-                            <span className="sr-only">Shopping Cart</span>
-                            <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-                            <span className="absolute -top-1 -right-1 inline-flex items-center justify-center h-4 w-4 rounded-full bg-blue-600 text-xs font-bold text-white">
-                              {totalItems}
-                            </span>
-                          </Link>
-                        )}
-                        <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                          <span className="sr-only">Open user menu</span>
-                          <UserCircleIcon className="h-8 w-8 text-gray-400" aria-hidden="true" />
-                        </Menu.Button>
-                      </div>
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-200"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                      >
-                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-                            <p>Welcome, {user.username}</p>
-                            {isAdmin && (
-                              <span className="inline-block mt-1 text-xs bg-red-100 text-red-800 rounded-full px-2 py-0.5">
-                                Admin
-                              </span>
-                            )}
-                          </div>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="#profile"
-                                className={`${
-                                  active ? 'bg-gray-100' : ''
-                                } block px-4 py-2 text-sm text-gray-700`}
-                              >
-                                Profile
-                              </a>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                onClick={handleLogout}
-                                className={`${
-                                  active ? 'bg-gray-100' : ''
-                                } block w-full text-left px-4 py-2 text-sm text-gray-700`}
-                              >
-                                Sign out
-                              </button>
-                            )}
-                          </Menu.Item>
-                        </Menu.Items>
-                      </Transition>
-                    </Menu>
-                  ) : (
-                    <div className="flex items-center space-x-3">
+                    <>
                       <Link
-                        to="/login"
-                        className="px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-500"
+                        to="/cart"
+                        className="relative rounded-full border border-[color:var(--brand-line)] bg-white p-2 text-[color:var(--brand-muted)] transition hover:border-[color:var(--brand-accent)] hover:text-[color:var(--brand-accent)]"
                       >
+                        <span className="sr-only">Shopping Cart</span>
+                        <ShoppingCartIcon className="h-5 w-5" aria-hidden="true" />
+                        {totalItems > 0 && (
+                          <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--brand-accent)] px-1 text-[10px] font-bold text-white">
+                            {totalItems}
+                          </span>
+                        )}
+                      </Link>
+
+                      <Menu as="div" className="relative">
+                        <Menu.Button className="inline-flex items-center gap-2 rounded-full border border-[color:var(--brand-line)] bg-white px-3 py-2 text-sm font-semibold text-[color:var(--brand-ink)] transition hover:border-[color:var(--brand-accent)]">
+                          <UserCircleIcon className="h-5 w-5 text-[color:var(--brand-muted)]" aria-hidden="true" />
+                          <span>{user.username}</span>
+                        </Menu.Button>
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-120"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-2xl border border-[color:var(--brand-line)] bg-white p-2 shadow-xl focus:outline-none">
+                            <div className="rounded-xl bg-[color:var(--brand-paper)] px-3 py-2 text-sm text-[color:var(--brand-muted)]">
+                              Signed in as <span className="font-semibold text-[color:var(--brand-ink)]">{user.username}</span>
+                            </div>
+                            {isAdmin && (
+                              <div className="px-3 pb-2 pt-1 text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--brand-accent)]">
+                                Admin account
+                              </div>
+                            )}
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  onClick={handleLogout}
+                                  className={`mt-1 w-full rounded-xl px-3 py-2 text-left text-sm font-semibold ${
+                                    active ? 'bg-[#fff1f1] text-[color:var(--brand-danger)]' : 'text-[color:var(--brand-muted)]'
+                                  }`}
+                                >
+                                  Sign out
+                                </button>
+                              )}
+                            </Menu.Item>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Link to="/login" className="button-secondary">
                         Sign in
                       </Link>
-                      <Link
-                        to="/register"
-                        className="rounded-md border border-transparent bg-blue-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-blue-500"
-                      >
-                        Sign up
+                      <Link to="/register" className="button-primary">
+                        Join now
                       </Link>
                     </div>
                   )}
                 </div>
-                
-                <div className="flex items-center sm:hidden">
+
+                <div className="flex items-center gap-2 md:hidden">
                   {isAuthenticated && (
-                    <Link to="/cart" className="relative p-1 mr-2 rounded-full text-gray-500 hover:text-gray-600">
-                      <ShoppingCartIcon className="h-6 w-6" />
+                    <Link
+                      to="/cart"
+                      className="relative rounded-full border border-[color:var(--brand-line)] bg-white p-2 text-[color:var(--brand-muted)]"
+                    >
+                      <ShoppingCartIcon className="h-5 w-5" />
                       {totalItems > 0 && (
-                        <span className="absolute -top-1 -right-1 inline-flex items-center justify-center h-4 w-4 rounded-full bg-blue-600 text-xs font-bold text-white">
+                        <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--brand-accent)] px-1 text-[10px] font-bold text-white">
                           {totalItems}
                         </span>
                       )}
                     </Link>
                   )}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-full border border-[color:var(--brand-line)] bg-white p-2 text-[color:var(--brand-muted)] transition hover:text-[color:var(--brand-accent)]">
                     <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
-                    {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                    )}
+                    {open ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
                   </Disclosure.Button>
                 </div>
               </div>
             </div>
-            
-            <Disclosure.Panel className="sm:hidden">
-              <div className="space-y-1 pt-2 pb-3">
-                {navigation
-                  .filter(item => !item.protected || isAuthenticated)
-                  .filter(item => !item.admin || isAdmin)
-                  .map((item) => (
+
+            <Disclosure.Panel className="border-t border-[color:var(--brand-line)] bg-white/95 md:hidden">
+              <div className="page-shell space-y-2 py-4">
+                {visibleNavigation.map((item) => {
+                  const active = isRouteActive(item.href)
+                  return (
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                        location.pathname === item.href || location.pathname.startsWith(`${item.href}/`)
-                          ? 'border-blue-500 bg-blue-50 text-blue-700'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                      className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-semibold ${
+                        active
+                          ? 'bg-[color:var(--brand-accent-soft)] text-[color:var(--brand-accent)]'
+                          : 'bg-[color:var(--brand-paper)] text-[color:var(--brand-muted)]'
                       }`}
                     >
-                      {item.name}
+                      <span>{item.name}</span>
                       {item.badge > 0 && (
-                        <span className="ml-1 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--brand-accent)] px-1 text-[10px] font-bold text-white">
                           {item.badge}
                         </span>
                       )}
                     </Link>
-                  ))}
+                  )
+                })}
+
+                {isAuthenticated ? (
+                  <button onClick={handleLogout} className="button-danger mt-1 w-full">
+                    Sign out
+                  </button>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <Link to="/login" className="button-secondary w-full">
+                      Sign in
+                    </Link>
+                    <Link to="/register" className="button-primary w-full">
+                      Join now
+                    </Link>
+                  </div>
+                )}
               </div>
-              
-              {isAuthenticated ? (
-                <div className="border-t border-gray-200 pt-4 pb-3">
-                  <div className="flex items-center px-4">
-                    <div>
-                      <div className="text-base font-medium text-gray-800">{user.username}</div>
-                      <div className="text-sm font-medium text-gray-500">{user.email}</div>
-                    </div>
-                  </div>
-                  <div className="mt-3 space-y-1">
-                    <Disclosure.Button
-                      as="a"
-                      href="#profile"
-                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                    >
-                      Profile
-                    </Disclosure.Button>
-                    <Disclosure.Button
-                      as="button"
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                    >
-                      Sign out
-                    </Disclosure.Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="border-t border-gray-200 py-4 px-4 flex space-x-3">
-                  <Link
-                    to="/login"
-                    className="flex-1 px-3 py-2 text-center text-sm font-medium text-blue-600 hover:text-blue-500 border border-gray-200 rounded-md"
-                  >
-                    Sign in
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="flex-1 px-3 py-2 text-center text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-md"
-                  >
-                    Sign up
-                  </Link>
-                </div>
-              )}
             </Disclosure.Panel>
           </>
         )}
       </Disclosure>
-      
-      <main className="flex-grow py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {children}
-        </div>
+
+      <main className="pb-14 pt-8 sm:pt-10">
+        <div className="page-shell">{children}</div>
       </main>
-      
-      <footer className="bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-500">
-            &copy; 2023 E-Shop, Inc. All rights reserved.
-          </p>
+
+      <footer className="border-t border-[color:var(--brand-line)] bg-white/70">
+        <div className="page-shell flex flex-col gap-3 py-8 text-sm text-[color:var(--brand-muted)] sm:flex-row sm:items-center sm:justify-between">
+          <p>&copy; 2026 E-Shop. Curated for intentional shopping.</p>
+          <p>Built with modern commerce workflows and clean inventory operations.</p>
         </div>
       </footer>
     </div>
@@ -265,4 +237,4 @@ export default function MainLayout({ children }) {
 
 MainLayout.propTypes = {
   children: PropTypes.node.isRequired,
-} 
+}

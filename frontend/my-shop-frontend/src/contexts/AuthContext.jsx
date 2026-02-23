@@ -20,8 +20,8 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true)
         }
       } catch (error) {
-        console.error('初始化认证状态失败:', error)
-        logout() // 出错时清理状态
+        console.error('Failed to initialize auth state:', error)
+        logout() // Clear auth state on initialization failure.
       } finally {
         setLoading(false)
       }
@@ -30,13 +30,13 @@ export const AuthProvider = ({ children }) => {
     initAuth()
   }, [])
 
-  // 更新用户时同时更新认证状态
+  // Update user and auth state together.
   const updateUser = (userData) => {
     setUser(userData)
     setIsAuthenticated(!!userData)
   }
 
-  // 登出
+  // Logout
   const logout = () => {
     authLogout()
     setUser(null)

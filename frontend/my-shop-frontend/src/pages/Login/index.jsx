@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { login } from '../../services/auth'
 import { useAuth } from '../../contexts/AuthContext'
 import { authStyles as styles } from '../../styles/Auth.styles'
@@ -17,7 +17,6 @@ export default function Login() {
   useEffect(() => {
     if (location.state?.message) {
       setSuccessMessage(location.state.message)
-      // 清除URL参数
       window.history.replaceState({}, document.title)
     }
   }, [location])
@@ -26,18 +25,17 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setSuccessMessage('')
-    
+
     if (!username || !password) {
       setError('Please enter username and password')
       return
     }
-    
+
     try {
       setLoading(true)
       const data = await login(username, password)
       setUser(data)
-      
-      // 根据用户角色跳转到不同页面
+
       if (data.roles && data.roles.includes('ROLE_ADMIN')) {
         navigate('/admin/products')
       } else {
@@ -45,7 +43,6 @@ export default function Login() {
         navigate(from)
       }
     } catch (err) {
-      console.error('Login error:', err)
       setError(err.message || 'Login failed, please check your username and password')
     } finally {
       setLoading(false)
@@ -54,111 +51,85 @@ export default function Login() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
-        <img
-          className={styles.logo}
-          src="/logo.svg"
-          alt="E-Shop Logo"
-        />
-        <h2 className={styles.title}>Sign in to your account</h2>
-        <p className={styles.subtitle}>Welcome back! Please sign in to your account</p>
+      <aside className={styles.heroPanel}>
+        <div>
+          <span className="chip">Members Edition</span>
+          <h1 className={styles.heroTitle}>Sign in and continue your curated shopping journey.</h1>
+          <p className={styles.heroSubtitle}>
+            Access orders, saved products, and faster checkout. Your account keeps every purchase organized.
+          </p>
+        </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          {error && (
-            <div className={styles.errorMessage}>
-              <div className="text-sm">{error}</div>
-            </div>
-          )}
-          
-          {successMessage && (
-            <div className={styles.successMessage}>
-              <div className="text-sm">{successMessage}</div>
-            </div>
-          )}
+        <div className={styles.heroMeta}>
+          <p className="font-semibold text-[color:var(--brand-ink)]">E-Shop Notes</p>
+          <p className="mt-2">Use the same credentials for storefront and order tracking.</p>
+        </div>
+      </aside>
 
-          <div className={styles.inputGroup}>
-            <div className={styles.formField}>
-              <label htmlFor="username" className={styles.label}>Username</label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className={styles.input}
-                placeholder="Enter your username"
-                disabled={loading}
-              />
+      <section className={styles.cardWrap}>
+        <div className={styles.card}>
+          <img className={styles.logo} src="/logo.svg" alt="E-Shop Logo" />
+          <h2 className={styles.title}>Welcome back</h2>
+          <p className={styles.subtitle}>Sign in to browse products and manage orders.</p>
+
+          <form className={styles.form} onSubmit={handleSubmit}>
+            {error && <div className={styles.errorMessage}>{error}</div>}
+            {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+
+            <div className={styles.inputGroup}>
+              <div className={styles.formField}>
+                <label htmlFor="username" className={styles.label}>
+                  Username
+                </label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className={styles.input}
+                  placeholder="Enter your username"
+                  disabled={loading}
+                />
+              </div>
+
+              <div className={styles.formField}>
+                <label htmlFor="password" className={styles.label}>
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={styles.input}
+                  placeholder="Enter your password"
+                  disabled={loading}
+                />
+              </div>
             </div>
 
-            <div className={styles.formField}>
-              <label htmlFor="password" className={styles.label}>Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={styles.input}
-                placeholder="Enter your password"
-                disabled={loading}
-              />
-            </div>
-          </div>
+            <button type="submit" disabled={loading} className={styles.button}>
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
 
-          <div className="flex items-center justify-between mt-5">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                Remember me
-              </label>
+            <div className={styles.divider}>
+              <div className={styles.dividerLine} />
+              <span className={styles.dividerText}>or</span>
             </div>
-            <div className="text-sm">
-              <a href="#" className="text-sm text-blue-600 hover:text-blue-500">
-                Forgot password?
-              </a>
-            </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={styles.button}
-          >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Signing in...
-              </span>
-            ) : 'Login'}
-          </button>
-          
-          <div className={styles.divider}>
-            <div className={styles.dividerLine}></div>
-            <span className={styles.dividerText}>or</span>
-            <div className={styles.dividerLine}></div>
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?
+            <p className="text-center text-sm text-[color:var(--brand-muted)]">
+              New to E-Shop?
               <Link to="/register" className={styles.link}>
-                Sign up now
+                Create account
               </Link>
             </p>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      </section>
     </div>
   )
-} 
+}

@@ -1,15 +1,22 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getProductById } from '../../services/product'
 import { addToCart } from '../../services/cart'
 import { useAuth } from '../../contexts/AuthContext'
+import { useCart } from '../../contexts/CartContext'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 import ErrorMessage from '../../components/common/ErrorMessage'
+import { useToast } from '../../components/common/Toast'
+import { getProductImage, handleImageError } from '../../utils/image'
+import { formatUSD } from '../../utils/currency'
 
 export default function ProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { refreshCart } = useCart()
+  const showToast = useToast()
+
   const [product, setProduct] = useState(null)
   const [quantity, setQuantity] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -40,8 +47,8 @@ export default function ProductDetail() {
     try {
       setAddingToCart(true)
       await addToCart(product.id, quantity)
-      // 显示成功提示
-      alert('成功添加到购物车')
+      await refreshCart()
+      showToast('Added to cart successfully', 'success')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -49,73 +56,79 @@ export default function ProductDetail() {
     }
   }
 
-  if (loading) return <LoadingSpinner />
+  if (loading) return <LoadingSpinner fullScreen />
   if (error) return <ErrorMessage message={error} />
-  if (!product) return <ErrorMessage message="商品不存在" />
+  if (!product) return <ErrorMessage message="Product not found" />
 
   return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
-        {/* 商品图片 */}
-        <div className="lg:max-w-lg lg:self-end">
-          <div className="overflow-hidden rounded-lg">
+    <div className="space-y-6 pb-4">
+      <section className="section-frame p-6 sm:p-8">
+        <div className="text-sm text-[color:var(--brand-muted)]">
+          <Link to="/products" className="transition hover:text-[color:var(--brand-accent)]">
+            Products
+          </Link>
+          <span className="mx-2">/</span>
+          <span>{product.name}</span>
+        </div>
+
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
+          <div className="overflow-hidden rounded-3xl border border-[color:var(--brand-line)] bg-white">
             <img
-              src={product.imageUrl}
+              src={getProductImage(product.imageUrl)}
               alt={product.name}
-              className="h-full w-full object-cover object-center"
+              className="h-full w-full object-cover"
+              onError={handleImageError}
             />
           </div>
-        </div>
 
-        {/* 商品信息 */}
-        <div className="mt-10 lg:col-start-2 lg:mt-0 lg:self-center">
-          <div className="mt-4">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{product.name}</h1>
-            <p className="mt-4 text-gray-500">{product.description}</p>
-          </div>
+          <div>
+            <span className="chip">Featured Item</span>
+            <h1 className="mt-4 text-4xl sm:text-5xl">{product.name}</h1>
+            <p className="mt-4 text-base leading-relaxed text-[color:var(--brand-muted)]">{product.description}</p>
 
-          <div className="mt-10">
-            <h2 className="text-sm font-medium text-gray-900">详细信息</h2>
-            <div className="mt-4 space-y-6">
-              <p className="text-sm text-gray-600">{product.details}</p>
-            </div>
-          </div>
+            <div className="mt-6 rounded-2xl border border-[color:var(--brand-line)] bg-white p-5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--brand-muted)]">Price</span>
+                <span className="text-3xl font-semibold text-[color:var(--brand-accent)]">{formatUSD(product.price)}</span>
+              </div>
 
-          <div className="mt-10">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-medium text-gray-900">价格</h2>
-              <p className="text-2xl font-medium text-gray-900">¥{product.price}</p>
-            </div>
+              <div className="mt-5">
+                <label htmlFor="quantity" className="label">
+                  Quantity
+                </label>
+                <select
+                  id="quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  className="input-shell"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="mt-4">
-              <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
-                数量
-              </label>
-              <select
-                id="quantity"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={addingToCart}
+                className="button-primary mt-6 w-full"
               >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                  <option key={num} value={num}>
-                    {num}
-                  </option>
-                ))}
-              </select>
+                {addingToCart ? 'Adding...' : 'Add to cart'}
+              </button>
             </div>
-
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              disabled={addingToCart}
-              className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-400"
-            >
-              {addingToCart ? '添加中...' : '加入购物车'}
-            </button>
           </div>
         </div>
-      </div>
+      </section>
+
+      {product.details && (
+        <section className="section-frame p-6 sm:p-8">
+          <h2 className="section-title text-2xl">Product Notes</h2>
+          <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-[color:var(--brand-muted)]">{product.details}</p>
+        </section>
+      )}
     </div>
   )
-} 
+}

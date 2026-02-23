@@ -1,8 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getOrders } from '../../services/order'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 import ErrorMessage from '../../components/common/ErrorMessage'
+import { getProductImage, handleImageError } from '../../utils/image'
+import { formatUSD } from '../../utils/currency'
+import { normalizeOrder } from '../../utils/order'
+
+const getStatusClass = (status) => {
+  if (!status) return 'status-pill status-pill-warn'
+
+  const value = status.toUpperCase()
+  if (value.includes('DELIVER') || value.includes('PAID') || value.includes('COMPLET')) {
+    return 'status-pill status-pill-success'
+  }
+  if (value.includes('CANCEL') || value.includes('FAIL')) {
+    return 'status-pill status-pill-danger'
+  }
+  return 'status-pill status-pill-warn'
+}
 
 export default function Orders() {
   const [orders, setOrders] = useState([])
@@ -13,7 +29,7 @@ export default function Orders() {
     const fetchOrders = async () => {
       try {
         const data = await getOrders()
-        setOrders(data)
+        setOrders(Array.isArray(data) ? data.map(normalizeOrder) : [])
       } catch (err) {
         setError(err.message)
       } finally {
@@ -24,83 +40,77 @@ export default function Orders() {
     fetchOrders()
   }, [])
 
-  if (loading) return <LoadingSpinner />
+  if (loading) return <LoadingSpinner fullScreen />
   if (error) return <ErrorMessage message={error} />
+
   if (orders.length === 0) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900">暂无订单</h2>
-        <p className="mt-2 text-gray-500">去购物吧</p>
-      </div>
+      <section className="section-frame p-10 text-center">
+        <h1 className="text-3xl">No orders yet</h1>
+        <p className="mt-3 text-sm text-[color:var(--brand-muted)]">Your completed checkouts will appear here.</p>
+        <Link to="/products" className="button-primary mt-6">
+          Start shopping
+        </Link>
+      </section>
     )
   }
 
   return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-2xl font-semibold text-gray-900">我的订单</h1>
-        <div className="mt-8">
-          {orders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-white shadow overflow-hidden sm:rounded-md mb-4"
-            >
-              <div className="px-4 py-5 sm:px-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    订单号：{order.orderNumber}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    下单时间：{new Date(order.createdAt).toLocaleString()}
-                  </p>
-                </div>
-                <div className="mt-4 border-t border-gray-200 pt-4">
-                  {order.items.map((item) => (
-                    <div key={item.id} className="flex justify-between py-2">
-                      <div className="flex items-center">
-                        <img
-                          src={item.product.imageUrl}
-                          alt={item.product.name}
-                          className="h-16 w-16 object-cover rounded"
-                        />
-                        <div className="ml-4">
-                          <h4 className="text-sm font-medium text-gray-900">
-                            {item.product.name}
-                          </h4>
-                          <p className="text-sm text-gray-500">
-                            数量：{item.quantity}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-sm font-medium text-gray-900">
-                        ¥{item.price * item.quantity}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 flex justify-between items-center border-t border-gray-200 pt-4">
-                  <div>
-                    <p className="text-sm text-gray-500">
-                      订单状态：{order.status}
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <p className="text-lg font-medium text-gray-900 mr-4">
-                      总计：¥{order.totalAmount}
-                    </p>
-                    <Link
-                      to={`/orders/${order.id}`}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-indigo-100 hover:bg-indigo-200"
-                    >
-                      查看详情
-                    </Link>
-                  </div>
-                </div>
+    <section className="section-frame p-6 sm:p-8">
+      <div className="section-header">
+        <div>
+          <h1 className="section-title">My Orders</h1>
+          <p className="section-subtitle mt-2">Track purchases, delivery status, and totals in one timeline.</p>
+        </div>
+        <span className="chip">{orders.length} records</span>
+      </div>
+
+      <div className="mt-6 space-y-4">
+        {orders.map((order) => (
+          <article key={order.id} className="card-lift">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--brand-muted)]">Order number</p>
+                <h2 className="mt-1 text-xl">{order.orderNumber}</h2>
+              </div>
+              <div className="text-right">
+                <span className={getStatusClass(order.status)}>{order.status}</span>
+                <p className="mt-2 text-xs text-[color:var(--brand-muted)]">{new Date(order.createdAt).toLocaleString()}</p>
               </div>
             </div>
-          ))}
-        </div>
+
+            <div className="mt-4 space-y-3 border-t border-[color:var(--brand-line)] pt-4">
+              {order.items.slice(0, 3).map((item) => (
+                <div key={item.id} className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={getProductImage(item.product?.imageUrl)}
+                      alt={item.product.name}
+                      className="h-12 w-12 rounded-xl object-cover"
+                      onError={handleImageError}
+                    />
+                    <div>
+                      <p className="text-sm font-semibold">{item.product.name}</p>
+                      <p className="text-xs text-[color:var(--brand-muted)]">Qty {item.quantity}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm font-semibold">{formatUSD(item.price * item.quantity)}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--brand-line)] pt-4">
+              <p className="text-sm text-[color:var(--brand-muted)]">Total</p>
+              <div className="flex items-center gap-3">
+                <p className="text-xl font-semibold text-[color:var(--brand-accent)]">{formatUSD(order.totalAmount)}</p>
+                <Link to={`/orders/${order.id}`} className="button-secondary py-2">
+                  View detail
+                </Link>
+              </div>
+            </div>
+          </article>
+        ))}
       </div>
-    </div>
+    </section>
   )
-} 
+}

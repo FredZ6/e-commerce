@@ -1,161 +1,164 @@
 export const authStyles = {
   container: `
-    min-h-screen 
-    flex 
-    items-center 
-    justify-center 
-    bg-white
-    py-12 
-    px-4 
-    sm:px-6 
-    lg:px-8
+    min-h-screen
+    grid
+    lg:grid-cols-[1fr_480px]
+    bg-[linear-gradient(140deg,#fdfcf9_0%,#f3eee5_42%,#e9f0ff_100%)]
   `,
-  
-  card: `
-    bg-white 
-    rounded-lg
-    shadow-md
+
+  heroPanel: `
+    hidden
+    lg:flex
+    flex-col
+    justify-between
+    p-12
+    xl:p-16
+    border-r
+    border-[color:var(--brand-line)]
+  `,
+
+  heroTitle: `
+    text-5xl
+    leading-tight
+    text-balance
+  `,
+
+  heroSubtitle: `
+    mt-5
+    max-w-lg
+    text-base
+    leading-relaxed
+    text-[color:var(--brand-muted)]
+  `,
+
+  heroMeta: `
+    rounded-3xl
     border
-    border-gray-100
-    w-full 
-    max-w-md 
-    p-8
-    space-y-6
+    border-[color:var(--brand-line)]
+    bg-white/70
+    p-5
+    text-sm
+    text-[color:var(--brand-muted)]
+  `,
+
+  cardWrap: `
+    flex
+    items-center
+    justify-center
+    px-5
+    py-10
+    sm:px-8
+    lg:px-10
+  `,
+
+  card: `
+    w-full
+    max-w-lg
+    rounded-3xl
+    border
+    border-[color:var(--brand-line)]
+    bg-white/92
+    p-6
+    shadow-[0_20px_50px_rgba(27,36,56,0.12)]
+    backdrop-blur
+    sm:p-8
   `,
 
   logo: `
-    mx-auto 
-    h-12
+    h-11
     w-auto
   `,
 
   title: `
-    mt-8
-    text-center 
-    text-2xl
-    font-bold
-    text-gray-800
+    mt-4
+    text-3xl
   `,
 
   subtitle: `
-    mt-3
-    mb-6
-    text-center 
-    text-sm 
-    text-gray-500
+    mt-2
+    text-sm
+    text-[color:var(--brand-muted)]
   `,
 
   form: `
+    mt-6
     space-y-5
   `,
 
   inputGroup: `
-    space-y-5
+    space-y-4
   `,
 
   formField: `
-    mb-5
+    space-y-2
   `,
 
   label: `
-    block 
-    text-sm 
-    font-medium 
-    text-gray-700 
-    mb-2
+    label
   `,
 
   input: `
-    appearance-none 
-    block 
-    w-full 
-    px-4 
-    py-3 
-    border 
-    border-gray-200
-    rounded-md
-    text-gray-700
-    bg-white
-    placeholder-gray-400
-    focus:outline-none 
-    focus:ring-1
-    focus:ring-blue-500 
-    focus:border-blue-500 
-    transition
-    duration-150
-    text-sm
+    input-shell
   `,
 
   button: `
-    w-full 
-    flex 
-    justify-center 
-    py-3 
-    px-4 
-    border 
-    border-transparent 
-    rounded-md
-    font-medium 
-    text-white 
-    bg-blue-600 
-    hover:bg-blue-500 
-    focus:outline-none 
-    focus:ring-2 
-    focus:ring-offset-2 
-    focus:ring-blue-500
-    transition
-    duration-150
-    text-sm
-    mt-8
+    button-primary
+    w-full
   `,
 
   link: `
-    font-medium 
-    text-blue-600 
-    hover:text-blue-500
+    font-semibold
+    text-[color:var(--brand-accent)]
+    hover:text-[#104ccb]
     ml-1
   `,
 
   errorMessage: `
-    rounded-md
-    bg-red-50 
-    p-4 
-    mb-5
+    rounded-2xl
     border
-    border-red-100
-    text-red-600
+    border-[#f2cccc]
+    bg-[#fff3f3]
+    px-4
+    py-3
+    text-sm
+    text-[color:var(--brand-danger)]
   `,
 
   successMessage: `
-    rounded-md
-    bg-green-50 
-    p-4 
-    mb-5
+    rounded-2xl
     border
-    border-green-100
-    text-green-600
+    border-[#c9eddc]
+    bg-[#f0fbf6]
+    px-4
+    py-3
+    text-sm
+    text-[color:var(--brand-success)]
   `,
 
   divider: `
-    my-6
     relative
     flex
     items-center
     justify-center
+    py-1
   `,
 
   dividerLine: `
-    w-full
+    absolute
+    inset-x-0
+    top-1/2
     border-t
-    border-gray-200
+    border-[color:var(--brand-line)]
   `,
 
   dividerText: `
-    px-3
-    text-sm
-    text-gray-500
-    bg-white
     relative
     z-10
+    bg-white
+    px-3
+    text-xs
+    uppercase
+    tracking-[0.14em]
+    text-[color:var(--brand-muted)]
   `,
-} 
+}

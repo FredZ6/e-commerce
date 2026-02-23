@@ -1,10 +1,10 @@
 import api from './api'
 
 /**
- * 用户登录
- * @param {string} username 用户名
- * @param {string} password 密码
- * @returns {Promise} 登录响应
+ * User login
+ * @param {string} username username
+ * @param {string} password password
+ * @returns {Promise} login response
  */
 export const login = async (username, password) => {
   try {
@@ -19,14 +19,14 @@ export const login = async (username, password) => {
     return response.data
   } catch (error) {
     console.error('Login error:', error)
-    throw error.message ? error : { message: '登录失败，请检查用户名和密码' }
+    throw error.message ? error : { message: 'Login failed, please check username and password' }
   }
 }
 
 /**
- * 用户注册
- * @param {Object} userData 用户数据
- * @returns {Promise} 注册响应
+ * User registration
+ * @param {Object} userData user payload
+ * @returns {Promise} registration response
  */
 export const register = async (userData) => {
   try {
@@ -38,23 +38,23 @@ export const register = async (userData) => {
     return response.data
   } catch (error) {
     console.error('Register error:', error)
-    throw error.message ? error : { message: '注册失败，请稍后重试' }
+    throw error.message ? error : { message: 'Registration failed, please try again later' }
   }
 }
 
 /**
- * 用户登出
+ * User logout
  */
 export const logout = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('user')
-  // 可选：清除其他用户相关状态
+  // Optional: clear other user-related state
   localStorage.removeItem('cart')
 }
 
 /**
- * 获取当前认证状态
- * @returns {Object|null} 用户信息
+ * Get current authentication state
+ * @returns {Object|null} user info
  */
 export const getCurrentUser = () => {
   const userStr = localStorage.getItem('user')

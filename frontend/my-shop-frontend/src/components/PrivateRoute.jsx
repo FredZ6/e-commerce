@@ -6,7 +6,7 @@ export default function PrivateRoute({ children, requiredRole }) {
   const { user, isAuthenticated, loading } = useAuth()
   const location = useLocation()
 
-  // 如果正在加载认证状态，显示加载中
+  // Show loading state while auth status is being initialized.
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -15,12 +15,12 @@ export default function PrivateRoute({ children, requiredRole }) {
     )
   }
 
-  // 如果未认证，重定向到登录页，并记录当前路径
+  // Redirect to login when user is not authenticated.
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  // 如果需要特定角色但用户没有该角色，重定向到商品页
+  // Redirect to products when required role is missing.
   if (requiredRole && (!user.roles || !user.roles.includes(`ROLE_${requiredRole}`))) {
     return <Navigate to="/products" replace />
   }

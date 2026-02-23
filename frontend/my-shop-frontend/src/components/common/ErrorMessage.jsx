@@ -2,12 +2,13 @@ import PropTypes from 'prop-types'
 
 export default function ErrorMessage({ message }) {
   return (
-    <div className="rounded-md bg-red-50 p-4">
-      <div className="text-sm text-red-700">{message}</div>
-    </div>
+    <section className="section-frame border-[#f2cccc] bg-[#fff5f5] p-5 text-[color:var(--brand-danger)]">
+      <p className="text-xs font-semibold uppercase tracking-[0.12em]">Request failed</p>
+      <p className="mt-2 text-sm">{message}</p>
+    </section>
   )
 }
 
 ErrorMessage.propTypes = {
   message: PropTypes.string.isRequired,
-} 
+}

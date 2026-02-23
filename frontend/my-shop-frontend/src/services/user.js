@@ -15,7 +15,7 @@ export const getCurrentUser = async () => {
   return response.data
 }
 
-// 管理员注册接口
+// Admin registration endpoint
 export const registerAdmin = async (userData) => {
   const response = await api.post('/users/register/admin', userData)
   return response.data

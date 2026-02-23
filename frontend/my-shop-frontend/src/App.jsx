@@ -9,12 +9,12 @@ import Register from './pages/Register'
 import { AuthProvider } from './contexts/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import ProductDetail from './pages/Products/ProductDetail'
-import './App.css'
 import { CartProvider } from './contexts/CartContext'
 import OrderDetail from './pages/Orders/OrderDetail'
 import { ToastProvider } from './components/common/Toast'
 import { ConfirmProvider } from './components/common/ConfirmDialog'
 import AdminProducts from './pages/Admin/Products'
+import Checkout from './pages/Checkout'
 
 function App() {
   return (
@@ -56,6 +56,16 @@ function App() {
                     <PrivateRoute>
                       <MainLayout>
                         <Cart />
+                      </MainLayout>
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/checkout"
+                  element={
+                    <PrivateRoute>
+                      <MainLayout>
+                        <Checkout />
                       </MainLayout>
                     </PrivateRoute>
                   }
