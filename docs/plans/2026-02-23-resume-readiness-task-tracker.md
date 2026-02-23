@@ -122,5 +122,28 @@ Acceptance:
 - Verified on 2026-02-23 with:
   - `rg -n "@Test" backend/shop/src/test/java | wc -l` -> 20 backend tests
   - `rg -n "\\btest\\(" frontend/my-shop-frontend/src/test frontend/my-shop-frontend/e2e | wc -l` -> 8 frontend/e2e tests
-  - `ls -1 .github/workflows | wc -l` -> 2 workflows
+  - `ls -1 .github/workflows | wc -l` -> 4 workflows (CI, E2E, manual deploy, manual destroy)
   - `sed -n '1,240p' docs/resume-bullets.md` (content review)
+
+---
+
+## Task R7: Manual Cloud Deploy Guardrails (No Always-On Spend)
+
+Status: Completed
+
+Goal:
+- Add click-to-deploy and click-to-destroy cloud demo workflows that never auto-trigger.
+
+Deliverables:
+- Manual deploy workflow (`workflow_dispatch` only).
+- Manual destroy workflow (`workflow_dispatch` only).
+- Remote deploy/destroy scripts with explicit confirm phrase guards.
+- Deploy env template and runbook for cost-safe operation.
+
+Acceptance:
+- No deploy workflows run on push/PR.
+- Deploy and destroy both require explicit safety phrase.
+- Verified on 2026-02-23 with:
+  - `bash -n scripts/cloud/deploy_demo_remote.sh scripts/cloud/destroy_demo_remote.sh`
+  - `ls -1 .github/workflows` includes `manual-demo-deploy.yml` and `manual-demo-destroy.yml`
+  - `rg -n "workflow_dispatch|DEPLOY_DEMO|DESTROY_DEMO" .github/workflows/manual-demo-*.yml docs/manual-cloud-deploy.md`

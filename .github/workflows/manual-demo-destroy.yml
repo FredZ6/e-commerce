@@ -1,0 +1,51 @@
+name: manual-demo-destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_phrase:
+        description: "Safety phrase. Must be DESTROY_DEMO"
+        required: true
+        type: string
+      remove_volumes:
+        description: "Remove persistent volumes"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-demo-destroy
+  cancel-in-progress: false
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate confirm phrase
+        run: |
+          if [ "${{ github.event.inputs.confirm_phrase }}" != "DESTROY_DEMO" ]; then
+            echo "Invalid confirm phrase. Set confirm_phrase=DESTROY_DEMO."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write SSH key
+        run: |
+          printf '%s\n' "${{ secrets.DEMO_SSH_PRIVATE_KEY }}" > /tmp/demo_ssh_key
+          chmod 600 /tmp/demo_ssh_key
+
+      - name: Destroy remote demo stack
+        env:
+          CONFIRM_DESTROY: DESTROY_DEMO
+          DEPLOY_HOST: ${{ secrets.DEMO_HOST }}
+          DEPLOY_USER: ${{ secrets.DEMO_USER }}
+          DEPLOY_SSH_KEY_PATH: /tmp/demo_ssh_key
+          REMOVE_VOLUMES: ${{ github.event.inputs.remove_volumes }}
+        run: |
+          chmod +x ./scripts/cloud/destroy_demo_remote.sh
+          ./scripts/cloud/destroy_demo_remote.sh

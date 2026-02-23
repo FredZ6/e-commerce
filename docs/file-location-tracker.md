@@ -27,6 +27,12 @@ Purpose: track files newly produced by parallel sessions, and mark whether each 
 | 2026-02-23 | `/Users/fredz/Downloads/e-commerce/frontend/my-shop-frontend/Dockerfile` | Synced Task 14 artifacts from `e-commerce-planb` | KEEP | Frontend container build definition | codex |
 | 2026-02-23 | `/Users/fredz/Downloads/e-commerce/backend/shop/Dockerfile` | Synced Task 14 artifacts from `e-commerce-planb` | KEEP | Backend container build definition | codex |
 | 2026-02-23 | `/private/tmp/backend-shop-git-backup-20260222-190852` | Preserved nested backend repo `.git` during single-repo migration | DELETE_AFTER_PUSH1 | Safety backup; removable after first stable push in monorepo mode | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/.env.deploy.example` | Added manual cloud deploy template | KEEP | Safe-by-default cloud deploy env template | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/docs/manual-cloud-deploy.md` | Added manual cloud deploy runbook | KEEP | Deployment and cost-control documentation | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/scripts/cloud/deploy_demo_remote.sh` | Added manual deploy script | KEEP | Explicit-confirm deploy script for remote VM demo | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/scripts/cloud/destroy_demo_remote.sh` | Added manual destroy script | KEEP | Explicit-confirm teardown script to stop cloud cost | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/.github/workflows/manual-demo-deploy.yml` | Added manual deploy GitHub Action | KEEP | Click-to-deploy workflow, no auto trigger | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/.github/workflows/manual-demo-destroy.yml` | Added manual destroy GitHub Action | KEEP | Click-to-destroy workflow, no auto trigger | codex |
 
 ## Expected Junk/Generated Locations (watch list)
 These are common locations that often become `DELETE_AFTER_PUSH1` if produced only for local verification.

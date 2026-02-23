@@ -1,0 +1,66 @@
+name: manual-demo-deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_phrase:
+        description: "Safety phrase. Must be DEPLOY_DEMO"
+        required: true
+        type: string
+      deploy_ref:
+        description: "Git ref to deploy"
+        required: true
+        default: "main"
+        type: string
+      run_smoke_check:
+        description: "Run remote smoke check after deploy"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-demo-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate confirm phrase
+        run: |
+          if [ "${{ github.event.inputs.confirm_phrase }}" != "DEPLOY_DEMO" ]; then
+            echo "Invalid confirm phrase. Set confirm_phrase=DEPLOY_DEMO."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.deploy_ref }}
+
+      - name: Write SSH key
+        run: |
+          printf '%s\n' "${{ secrets.DEMO_SSH_PRIVATE_KEY }}" > /tmp/demo_ssh_key
+          chmod 600 /tmp/demo_ssh_key
+
+      - name: Write deploy env
+        run: |
+          printf '%s\n' "${{ secrets.DEMO_ENV_FILE }}" > .env.deploy
+          chmod 600 .env.deploy
+
+      - name: Deploy manually to remote host
+        env:
+          CONFIRM_DEPLOY: DEPLOY_DEMO
+          DEPLOY_HOST: ${{ secrets.DEMO_HOST }}
+          DEPLOY_USER: ${{ secrets.DEMO_USER }}
+          DEPLOY_SSH_KEY_PATH: /tmp/demo_ssh_key
+          DEPLOY_REF: ${{ github.event.inputs.deploy_ref }}
+          LOCAL_ENV_FILE: .env.deploy
+          RUN_SMOKE_CHECK: ${{ github.event.inputs.run_smoke_check }}
+          REPO_URL: https://github.com/${{ github.repository }}.git
+        run: |
+          chmod +x ./scripts/cloud/deploy_demo_remote.sh
+          ./scripts/cloud/deploy_demo_remote.sh

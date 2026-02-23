@@ -162,10 +162,24 @@ Critical E2E workflow is defined at `.github/workflows/e2e.yml` and runs:
 - Dockerized stack startup
 - Playwright critical flow: register -> login -> add to cart -> place order
 
+## Manual Cloud Deployment (Cost-safe)
+
+This repository includes manual-only deployment workflows so cloud resources are never created on push/PR.
+
+- Deploy workflow: `.github/workflows/manual-demo-deploy.yml`
+- Destroy workflow: `.github/workflows/manual-demo-destroy.yml`
+- Remote scripts: `scripts/cloud/deploy_demo_remote.sh`, `scripts/cloud/destroy_demo_remote.sh`
+- Deploy env template: `.env.deploy.example`
+- Full runbook: `docs/manual-cloud-deploy.md`
+
+You deploy only when needed for demos by running `workflow_dispatch` and entering confirm phrases.
+After demo, run the destroy workflow to stop cost immediately.
+
 ## Project Docs
 
 - Architecture summary: `docs/architecture.md`
 - Resume bullets: `docs/resume-bullets.md`
+- Manual cloud deploy runbook: `docs/manual-cloud-deploy.md`
 ## Security
 
 - JWT for user authentication
