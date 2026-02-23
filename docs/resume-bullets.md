@@ -1,8 +1,9 @@
 # Resume Bullets
 
-- Built and shipped a full-stack e-commerce platform using Spring Boot (Java 17), React 18, PostgreSQL, and JWT auth with role-based access control.
-- Stabilized frontend/backend contracts with dedicated contract tests (MockMvc + Vitest), reducing integration drift between order/product payloads.
-- Implemented inventory-aware checkout logic with transactional stock validation and decrement to prevent overselling.
-- Added admin order operations (list + status transitions) and secured admin-only endpoints through unified Spring Security rules.
-- Introduced integration test coverage for checkout and admin flows, plus a GitHub Actions CI pipeline that runs backend tests and frontend lint/test/build on every push and PR.
-- Containerized the stack with Docker Compose (frontend + backend + PostgreSQL) and documented local deployment and architecture for interview-ready demos.
+- Delivered a full-stack e-commerce platform with Spring Boot, React 18, PostgreSQL, and JWT RBAC, packaged as a 3-service Docker Compose stack (`frontend` + `backend` + `postgres`) for one-command local demos.
+- Built and enforced quality automation across 28 tests (20 backend JUnit + 7 frontend Vitest + 1 Playwright E2E) with 2 GitHub Actions workflows (CI + E2E) on push/PR.
+- Added contract and integration coverage for core commerce flows, including login, product browsing, cart updates, checkout, and admin order status transitions.
+- Implemented transactional inventory protection (stock validation and decrement at checkout) to prevent overselling and keep order state/data consistent.
+- Hardened security by removing permissive JWT defaults in non-local environments, adding startup secret validation, and introducing login abuse controls (5 attempts/5-minute window, 15-minute block).
+- Improved demo reliability with local profile seeding of 6 curated products and deterministic local SVG product assets, plus retryable catalog error states in the product listing UX.
+- Enforced measurable coverage gates: frontend (lines/functions/statements >= 30%, branches >= 20%) and backend JaCoCo (line >= 35%, branch >= 20%).

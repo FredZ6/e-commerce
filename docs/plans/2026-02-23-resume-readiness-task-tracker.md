@@ -109,7 +109,7 @@ Acceptance:
 
 ## Task R6: Resume Bullets with Quantified Impact
 
-Status: Pending
+Status: Completed
 
 Goal:
 - Rewrite resume bullets to include measurable outcomes and technical depth.
@@ -119,3 +119,8 @@ Deliverables:
 
 Acceptance:
 - Bullets are concise, metric-based, and interview-ready.
+- Verified on 2026-02-23 with:
+  - `rg -n "@Test" backend/shop/src/test/java | wc -l` -> 20 backend tests
+  - `rg -n "\\btest\\(" frontend/my-shop-frontend/src/test frontend/my-shop-frontend/e2e | wc -l` -> 8 frontend/e2e tests
+  - `ls -1 .github/workflows | wc -l` -> 2 workflows
+  - `sed -n '1,240p' docs/resume-bullets.md` (content review)
