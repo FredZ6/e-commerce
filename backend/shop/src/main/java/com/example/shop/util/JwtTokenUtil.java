@@ -29,20 +29,19 @@ public class JwtTokenUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
+    private static final int MIN_HS512_KEY_BYTES = 64;
+
     // 获取密钥
     private SecretKey getSigningKey() {
-        // 使用 Keys.secretKeyFor 生成足够长度的密钥
         if (secret == null || secret.trim().isEmpty()) {
-            return Keys.secretKeyFor(SignatureAlgorithm.HS512);
+            throw new IllegalStateException("JWT secret is not configured.");
         }
-        
-        // 确保密钥长度足够
+
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        if (keyBytes.length * 8 < 512) {  // 检查位数
-            log.warn("Provided key is too short, generating a secure key");
-            return Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        if (keyBytes.length < MIN_HS512_KEY_BYTES) {
+            throw new IllegalStateException("JWT secret must be at least 64 bytes for HS512.");
         }
-        
+
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

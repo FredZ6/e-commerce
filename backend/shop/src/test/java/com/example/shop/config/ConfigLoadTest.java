@@ -14,9 +14,11 @@ class ConfigLoadTest {
     void contextLoadsWithEnvBackedSecrets() throws IOException {
         String properties = Files.readString(Path.of("src/main/resources/application.properties"));
 
-        assertThat(properties).contains("spring.datasource.url=${DB_URL:");
-        assertThat(properties).contains("spring.datasource.username=${DB_USERNAME:");
-        assertThat(properties).contains("spring.datasource.password=${DB_PASSWORD:");
-        assertThat(properties).contains("jwt.secret=${JWT_SECRET:");
+        assertThat(properties).contains("spring.profiles.default=local");
+        assertThat(properties).contains("spring.datasource.url=${DB_URL}");
+        assertThat(properties).contains("spring.datasource.username=${DB_USERNAME}");
+        assertThat(properties).contains("spring.datasource.password=${DB_PASSWORD}");
+        assertThat(properties).contains("jwt.secret=${JWT_SECRET}");
+        assertThat(properties).contains("jwt.expiration=${JWT_EXPIRATION}");
     }
 }

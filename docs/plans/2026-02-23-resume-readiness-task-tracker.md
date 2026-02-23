@@ -66,7 +66,7 @@ Acceptance:
 
 ## Task R4: Security Hardening for Resume Credibility
 
-Status: Pending
+Status: Completed
 
 Goal:
 - Remove weak defaults and tighten runtime safety for production mode.
@@ -79,6 +79,9 @@ Deliverables:
 Acceptance:
 - App startup fails fast when critical prod secrets are missing.
 - Security regression tests pass.
+- Verified on 2026-02-23 with:
+  - `cd backend/shop && ./mvnw -q -Dtest=SecurityStartupValidatorTest,LoginRateLimitTest test`
+  - `cd backend/shop && ./mvnw -q test`
 
 ---
 

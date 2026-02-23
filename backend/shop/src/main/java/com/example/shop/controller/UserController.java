@@ -2,6 +2,7 @@ package com.example.shop.controller;
 
 import com.example.shop.model.User;
 import com.example.shop.service.UserService;
+import com.example.shop.service.LoginAttemptService;
 import com.example.shop.util.JwtTokenUtil;
 import com.example.shop.dto.JwtResponse;
 import com.example.shop.dto.UserDto;
@@ -20,14 +21,17 @@ import java.util.Collections;
 public class UserController {
 
     private final UserService userService;
+    private final LoginAttemptService loginAttemptService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public UserController(UserService userService,
+                          LoginAttemptService loginAttemptService,
                           AuthenticationManager authenticationManager,
                           JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.loginAttemptService = loginAttemptService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -77,6 +81,11 @@ public class UserController {
     // 用户登录
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody UserDto userDto) {
+        String loginKey = userDto.getUsername();
+        if (loginAttemptService.isBlocked(loginKey)) {
+            return ResponseEntity.status(429).body("Too many login attempts. Try again later.");
+        }
+
         try {
             // 进行身份验证
             authenticationManager.authenticate(
@@ -86,12 +95,14 @@ public class UserController {
                     )
             );
         } catch (BadCredentialsException e) {
+            loginAttemptService.recordFailure(loginKey);
             return ResponseEntity.status(401).body("Invalid username or password");
         }
 
         // 获取用户信息并生成令牌
         final User user = userService.findByUsername(userDto.getUsername());
         final String token = jwtTokenUtil.generateToken(user);
+        loginAttemptService.recordSuccess(loginKey);
 
         // 构建响应
         return ResponseEntity.ok(JwtResponse.builder()
