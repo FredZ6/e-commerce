@@ -1,6 +1,16 @@
 # E-Commerce Shop Project
 
+![CI](https://github.com/FredZ6/e-commerce/actions/workflows/ci.yml/badge.svg)
+
 This is an e-commerce shop project built with Spring Boot for the backend API and React for the frontend interface.
+
+## Live Demo
+
+- Frontend: `TBD`
+- Backend API: `TBD`
+- Demo user: `TBD`
+
+Note: after deploying this repository to cloud, update these links and credentials.
 
 ## Project Structure
 
@@ -105,6 +115,20 @@ Stop all services:
 
 ```bash
 docker compose down
+```
+
+### Demo Smoke Check
+
+After services are up, run:
+
+```bash
+./scripts/smoke-demo.sh
+```
+
+Or custom endpoints:
+
+```bash
+FRONTEND_URL=http://localhost:5174 BACKEND_URL=http://localhost:8082 ./scripts/smoke-demo.sh
 ```
 ## Quality Checks
 
