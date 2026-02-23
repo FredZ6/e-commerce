@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllProducts } from '../../services/product'
 import { addToCart } from '../../services/cart'
@@ -23,20 +23,22 @@ export default function Products() {
   const [sortBy, setSortBy] = useState('featured')
   const [pendingAction, setPendingAction] = useState(null)
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getAllProducts()
-        setProducts(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
+  const fetchProducts = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await getAllProducts()
+      setProducts(data)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
-
-    fetchProducts()
   }, [])
+
+  useEffect(() => {
+    fetchProducts()
+  }, [fetchProducts])
 
   const visibleProducts = useMemo(() => {
     const normalized = query.trim().toLowerCase()
@@ -91,7 +93,20 @@ export default function Products() {
   const openProductDetail = (productId) => navigate(`/products/${productId}`)
 
   if (loading) return <LoadingSpinner fullScreen />
-  if (error) return <ErrorMessage message={error} />
+  if (error) {
+    return (
+      <section className="space-y-4">
+        <ErrorMessage message={error} />
+        <button
+          type="button"
+          onClick={fetchProducts}
+          className="button-secondary px-6"
+        >
+          Try again
+        </button>
+      </section>
+    )
+  }
 
   return (
     <div className="space-y-6 pb-4">

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Noise-Canceling Headphones">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#e3ebfd"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <path d="M250 360 C250 200 550 200 550 360" fill="none" stroke="#2c3e68" stroke-width="28" stroke-linecap="round"/>
+  <rect x="220" y="330" width="85" height="140" rx="36" fill="#ffffff" stroke="#2c3e68" stroke-width="12"/>
+  <rect x="495" y="330" width="85" height="140" rx="36" fill="#ffffff" stroke="#2c3e68" stroke-width="12"/>
+  <text x="400" y="550" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#20345f">Noise-Canceling Headphones</text>
+</svg>

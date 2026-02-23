@@ -87,7 +87,7 @@ Acceptance:
 
 ## Task R5: UX Data States + Demo Seed Data
 
-Status: Pending
+Status: Completed
 
 Goal:
 - Ensure reviewer sees a polished UI with meaningful demo content immediately.
@@ -99,6 +99,11 @@ Deliverables:
 
 Acceptance:
 - Fresh environment shows curated products without manual DB edits.
+- Verified on 2026-02-23 with:
+  - `cd backend/shop && ./mvnw -q -Dtest=DemoCatalogSeederTest test`
+  - `cd backend/shop && ./mvnw -q test`
+  - `cd frontend/my-shop-frontend && npm run test:run -- src/test/products/ProductsPageStates.test.jsx`
+  - `cd frontend/my-shop-frontend && npm run lint && npm run test:run && npm run build`
 
 ---
 
