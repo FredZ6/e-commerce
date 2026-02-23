@@ -1,6 +1,7 @@
 # E-Commerce Shop Project
 
 ![CI](https://github.com/FredZ6/e-commerce/actions/workflows/ci.yml/badge.svg)
+![E2E](https://github.com/FredZ6/e-commerce/actions/workflows/e2e.yml/badge.svg)
 
 This is an e-commerce shop project built with Spring Boot for the backend API and React for the frontend interface.
 
@@ -150,6 +151,11 @@ GitHub Actions workflow is defined at `.github/workflows/ci.yml` and runs:
 
 - Backend: `./mvnw -q test`
 - Frontend: `npm ci`, `npm run lint`, `npm run test:run`, `npm run build`
+
+Critical E2E workflow is defined at `.github/workflows/e2e.yml` and runs:
+
+- Dockerized stack startup
+- Playwright critical flow: register -> login -> add to cart -> place order
 
 ## Project Docs
 

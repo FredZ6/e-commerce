@@ -27,7 +27,7 @@ Acceptance:
 
 ## Task R2: End-to-End Critical User Journey (Playwright)
 
-Status: Pending
+Status: Completed
 
 Goal:
 - Add one E2E flow: login -> product browse -> add to cart -> checkout -> order visible.
@@ -38,6 +38,9 @@ Deliverables:
 
 Acceptance:
 - E2E test passes locally and in CI.
+- Verified locally on 2026-02-23 with:
+  - `POSTGRES_HOST_PORT=5436 BACKEND_HOST_PORT=8084 FRONTEND_HOST_PORT=5176 docker compose up -d --build`
+  - `E2E_FRONTEND_URL=http://localhost:5176 E2E_API_URL=http://localhost:8084 npm run e2e`
 
 ---
 
