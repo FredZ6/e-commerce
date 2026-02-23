@@ -50,6 +50,9 @@ If you do nothing, no cloud resource is started.
 
 3. Click **Run workflow**.
 
+4. Record deploy proof:
+- Fill `docs/deploy-proof-template.md` with run URL, deployed endpoints, and smoke check summary.
+
 ## Destroy right after demo
 
 1. Open workflow:
@@ -60,6 +63,9 @@ If you do nothing, no cloud resource is started.
 - `remove_volumes`: `true` (recommended to fully clean DB/storage)
 
 3. Click **Run workflow**.
+
+4. Record destroy proof:
+- Fill `docs/deploy-proof-template.md` with destroy run URL and teardown result.
 
 ## Local fallback (without Actions)
 
@@ -91,3 +97,11 @@ DEPLOY_SSH_KEY_PATH=~/.ssh/demo.pem \
 - Keep only port `80` exposed publicly.
 - Destroy stack immediately after demo.
 - Stop or delete VM if you do not need near-term demos.
+
+## Guardrail sanity check
+
+Before changing deploy workflows/scripts, run:
+
+```bash
+./scripts/cloud/verify_manual_workflows.sh
+```

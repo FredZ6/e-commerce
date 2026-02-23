@@ -169,17 +169,32 @@ This repository includes manual-only deployment workflows so cloud resources are
 - Deploy workflow: `.github/workflows/manual-demo-deploy.yml`
 - Destroy workflow: `.github/workflows/manual-demo-destroy.yml`
 - Remote scripts: `scripts/cloud/deploy_demo_remote.sh`, `scripts/cloud/destroy_demo_remote.sh`
+- Guardrail check script: `scripts/cloud/verify_manual_workflows.sh`
 - Deploy env template: `.env.deploy.example`
 - Full runbook: `docs/manual-cloud-deploy.md`
+- Evidence template: `docs/deploy-proof-template.md`
 
 You deploy only when needed for demos by running `workflow_dispatch` and entering confirm phrases.
 After demo, run the destroy workflow to stop cost immediately.
+
+### 5-Minute Demo + Rollback Flow
+
+1. Run `manual-demo-deploy` with `confirm_phrase=DEPLOY_DEMO`, `deploy_ref=main`, `run_smoke_check=true`.
+2. Open deployed app and API URL, then record evidence in `docs/deploy-proof-template.md`.
+3. Run `manual-demo-destroy` with `confirm_phrase=DESTROY_DEMO`, `remove_volumes=true`.
+4. Record destroy run URL and result in `docs/deploy-proof-template.md`.
+5. Verify guardrails before/after edits:
+
+```bash
+./scripts/cloud/verify_manual_workflows.sh
+```
 
 ## Project Docs
 
 - Architecture summary: `docs/architecture.md`
 - Resume bullets: `docs/resume-bullets.md`
 - Manual cloud deploy runbook: `docs/manual-cloud-deploy.md`
+- Deployment evidence template: `docs/deploy-proof-template.md`
 ## Security
 
 - JWT for user authentication
