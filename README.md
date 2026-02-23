@@ -154,13 +154,15 @@ GitHub Actions workflow is defined at `.github/workflows/ci.yml` and runs:
 
 Coverage thresholds enforced in CI:
 
-- Frontend (Vitest): lines/functions/statements >= 30%, branches >= 20%
-- Backend (JaCoCo): line >= 35%, branch >= 20%
+- Frontend (Vitest): lines/functions/statements >= 40%, branches >= 30%
+- Backend (JaCoCo): line >= 50%, branch >= 30%
 
 Critical E2E workflow is defined at `.github/workflows/e2e.yml` and runs:
 
 - Dockerized stack startup
-- Playwright critical flow: register -> login -> add to cart -> place order
+- Playwright critical flows:
+  - register -> login -> add to cart -> place order
+  - admin updates order status -> user sees status change
 
 ## Manual Cloud Deployment (Cost-safe)
 
