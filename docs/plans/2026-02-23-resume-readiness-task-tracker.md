@@ -16,8 +16,8 @@ Startup rule:
 | 1 | One-click demo deploy proof | Partially Completed | `bca9592`, `a12ed16` |
 | 2 | E2E tests + quality gates | Completed | `8b25d86`, `37e8562`, `2c6d52c` |
 | 3 | Observability (logs/metrics/health) | Completed | `c6585a6` |
-| 4 | Replace external images with controllable assets | Completed | `1656c19`, `8584840` |
-| 5 | Performance + security baseline | Partially Completed | `3342745`, `1bba829`, `326ee81` |
+| 4 | Replace external images with controllable assets | Completed | `1656c19`, `8584840`, `639adab` |
+| 5 | Performance + security baseline | Completed | `3342745`, `1bba829`, `326ee81` |
 | 6 | Rewrite README + quantified resume bullets | Partially Completed | `13f5392`, `bca9592`, `2c6d52c` |
 
 ## Task 1 - One-Click Demo Deploy Proof
@@ -61,15 +61,14 @@ Done:
 
 ## Task 5 - Performance and Security Baseline
 
-Status: Partially Completed
+Status: Completed
 
 Done:
-- Security baseline exists: role-based guards, login abuse protection, startup secret validation.
-- OpenAPI docs are now published and contract-tested (useful for security checklisting).
-
-Remaining:
-- Add a reproducible API performance baseline report (load test script + results in docs).
-- Add a concise "authz checklist" doc for critical endpoints and expected roles.
+- Security baseline includes role-based guards, login abuse protection, and startup secret validation.
+- Added explicit security contract tests for critical authorization boundaries (including admin-only actuator metrics).
+- Added reproducible load baseline script: `scripts/perf/baseline.sh`.
+- Generated measurable baseline report: `docs/performance-baseline.md`.
+- Added critical endpoint authz checklist: `docs/security-authz-checklist.md`.
 
 ## Task 6 - README and Resume Bullets (Quantified)
 
