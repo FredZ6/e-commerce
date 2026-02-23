@@ -1,0 +1,31 @@
+# 设置默认的行尾结束符行为
+* text=auto
+
+# 对于 Windows 批处理文件，强制使用 CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# 对于 shell 脚本，强制使用 LF
+*.sh text eol=lf
+mvnw text eol=lf
+
+# 对于 Java 文件使用 LF
+*.java text eol=lf
+*.xml text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+
+# 二进制文件不应该被修改
+*.jar binary
+*.war binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
