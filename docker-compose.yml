@@ -1,7 +1,6 @@
 services:
   postgres:
     image: postgres:17-alpine
-    container_name: ecommerce-postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-ecommerce_db}
       POSTGRES_USER: ${DB_USERNAME:-postgres}
@@ -19,7 +18,6 @@ services:
   backend:
     build:
       context: ./backend/shop
-    container_name: ecommerce-backend
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-ecommerce_db}
       DB_USERNAME: ${DB_USERNAME:-postgres}
@@ -27,7 +25,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-local-dev-jwt-secret-local-dev-jwt-secret-local-dev-jwt-secret-local-dev-jwt-secret}
       JWT_EXPIRATION: ${JWT_EXPIRATION:-86400}
     ports:
-      - "8080:8080"
+      - "${BACKEND_HOST_PORT:-8080}:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -36,9 +34,8 @@ services:
   frontend:
     build:
       context: ./frontend/my-shop-frontend
-    container_name: ecommerce-frontend
     ports:
-      - "5173:80"
+      - "${FRONTEND_HOST_PORT:-5173}:80"
     depends_on:
       - backend
     restart: unless-stopped

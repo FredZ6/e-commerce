@@ -88,16 +88,18 @@ Run the full stack (PostgreSQL + backend + frontend) with one command:
 docker compose up -d --build
 ```
 
-If local port `5432` is already in use, set a different host port for PostgreSQL:
+If local ports are already in use, override host ports:
 
 ```bash
-POSTGRES_HOST_PORT=5433 docker compose up -d --build
+POSTGRES_HOST_PORT=5433 BACKEND_HOST_PORT=8081 FRONTEND_HOST_PORT=5174 docker compose up -d --build
 ```
+
+Compose does not pin explicit `container_name`, so multiple workspaces can run in parallel without name collisions.
 
 Endpoints:
 
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8080/api/products
+- Frontend: `http://localhost:${FRONTEND_HOST_PORT:-5173}`
+- Backend API: `http://localhost:${BACKEND_HOST_PORT:-8080}/api/products`
 
 Stop all services:
 
