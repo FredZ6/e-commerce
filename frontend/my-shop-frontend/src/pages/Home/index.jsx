@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { getProductImage, handleImageError } from '../../utils/image'
 
 const highlights = [
   {
@@ -35,7 +36,7 @@ const featureCollections = [
     name: 'Travel Kits',
     description: 'Designed to move with you in style.',
     image:
-      'https://images.unsplash.com/photo-1524492449090-1a2b30a1e0f4?auto=format&fit=crop&w=900&q=80',
+      'https://images.pexels.com/photos/307008/pexels-photo-307008.jpeg?auto=compress&cs=tinysrgb&w=900',
   },
 ]
 
@@ -109,7 +110,13 @@ export default function Home() {
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {featureCollections.map((collection) => (
             <article key={collection.id} className="card-lift overflow-hidden p-0">
-              <img src={collection.image} alt={collection.name} className="h-48 w-full object-cover" loading="lazy" />
+              <img
+                src={getProductImage(collection.image)}
+                alt={collection.name}
+                className="h-48 w-full object-cover"
+                loading="lazy"
+                onError={handleImageError}
+              />
               <div className="p-5">
                 <h3 className="text-xl">{collection.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[color:var(--brand-muted)]">{collection.description}</p>

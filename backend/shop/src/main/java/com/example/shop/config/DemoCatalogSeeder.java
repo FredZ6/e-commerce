@@ -10,8 +10,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @Profile({"local", "demo"})
@@ -27,16 +32,12 @@ public class DemoCatalogSeeder implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        if (productRepository.count() > 0) {
-            return;
-        }
-
         List<Product> demoProducts = List.of(
                 buildProduct(
                         "Wireless Mouse",
                         "A smooth and responsive wireless mouse.",
                         "19.99",
-                        "/demo-products/wireless-mouse.svg",
+                        "https://images.pexels.com/photos/13870518/pexels-photo-13870518.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
                         120,
                         "Ergonomic contour with silent click design.\nBluetooth and 2.4G dual mode."
                 ),
@@ -44,7 +45,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "Mechanical Keyboard",
                         "A durable mechanical keyboard with backlight.",
                         "79.99",
-                        "/demo-products/mechanical-keyboard.svg",
+                        "https://images.pexels.com/photos/31497027/pexels-photo-31497027.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
                         80,
                         "Hot-swappable switches and PBT keycaps.\nCompact layout for productivity."
                 ),
@@ -52,7 +53,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "HD Monitor",
                         "A 24-inch full HD monitor.",
                         "149.99",
-                        "/demo-products/hd-monitor.svg",
+                        "https://images.pexels.com/photos/1714203/pexels-photo-1714203.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
                         45,
                         "1080p IPS panel with vivid color accuracy.\nIncludes HDMI and DisplayPort."
                 ),
@@ -60,7 +61,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "USB-C Hub",
                         "A compact USB-C hub for daily expansion.",
                         "39.99",
-                        "/demo-products/usb-c-hub.svg",
+                        "https://images.pexels.com/photos/7742583/pexels-photo-7742583.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
                         95,
                         "Supports 4K HDMI output, USB 3.0, and pass-through charging."
                 ),
@@ -68,7 +69,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "Laptop Stand",
                         "An aluminum stand for ergonomic desk setup.",
                         "34.99",
-                        "/demo-products/laptop-stand.svg",
+                        "https://images.pexels.com/photos/14458078/pexels-photo-14458078.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
                         110,
                         "Improves airflow and raises screen height to reduce neck strain."
                 ),
@@ -76,14 +77,42 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "Noise-Canceling Headphones",
                         "Over-ear headphones with active noise canceling.",
                         "129.99",
-                        "/demo-products/noise-canceling-headphones.svg",
+                        "https://images.pexels.com/photos/15372898/pexels-photo-15372898.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
                         60,
                         "Up to 30 hours battery life with USB-C fast charging."
                 )
         );
 
-        productRepository.saveAll(demoProducts);
-        log.info("Seeded {} demo products for local profile.", demoProducts.size());
+        Map<String, Product> existingByName = productRepository.findAll().stream()
+                .filter(product -> product.getName() != null)
+                .collect(Collectors.toMap(Product::getName, Function.identity(), (left, right) -> left));
+
+        List<Product> productsToSave = new ArrayList<>();
+        int createdCount = 0;
+        int updatedImageCount = 0;
+
+        for (Product demoProduct : demoProducts) {
+            Product existingProduct = existingByName.get(demoProduct.getName());
+            if (existingProduct == null) {
+                productsToSave.add(demoProduct);
+                createdCount++;
+                continue;
+            }
+
+            if (!Objects.equals(existingProduct.getImageUrl(), demoProduct.getImageUrl())) {
+                existingProduct.setImageUrl(demoProduct.getImageUrl());
+                productsToSave.add(existingProduct);
+                updatedImageCount++;
+            }
+        }
+
+        if (productsToSave.isEmpty()) {
+            log.info("Demo catalog already synced ({} products).", demoProducts.size());
+            return;
+        }
+
+        productRepository.saveAll(productsToSave);
+        log.info("Synced demo catalog: created {}, updated images {}.", createdCount, updatedImageCount);
     }
 
     private Product buildProduct(String name,
