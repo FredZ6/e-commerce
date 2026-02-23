@@ -39,7 +39,7 @@ test('renders order list using orderItems fields', async () => {
 
   expect(await screen.findByText('Mouse')).toBeInTheDocument()
   expect(screen.getByText('Qty 2')).toBeInTheDocument()
-  expect(screen.getByText('$49.98')).toBeInTheDocument()
+  expect(screen.getAllByText('$49.98').length).toBeGreaterThan(0)
 })
 
 test('renders order detail using orderItems contract fields', async () => {
