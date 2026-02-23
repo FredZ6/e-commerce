@@ -1,2 +1,6 @@
 node_modules
-node_modules
+.DS_Store
+**/.DS_Store
+backend/shop/target/
+frontend/my-shop-frontend/dist/
+*.log

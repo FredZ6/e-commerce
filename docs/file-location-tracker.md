@@ -33,6 +33,12 @@ Purpose: track files newly produced by parallel sessions, and mark whether each 
 | 2026-02-23 | `/Users/fredz/Downloads/e-commerce/scripts/cloud/destroy_demo_remote.sh` | Added manual destroy script | KEEP | Explicit-confirm teardown script to stop cloud cost | codex |
 | 2026-02-23 | `/Users/fredz/Downloads/e-commerce/.github/workflows/manual-demo-deploy.yml` | Added manual deploy GitHub Action | KEEP | Click-to-deploy workflow, no auto trigger | codex |
 | 2026-02-23 | `/Users/fredz/Downloads/e-commerce/.github/workflows/manual-demo-destroy.yml` | Added manual destroy GitHub Action | KEEP | Click-to-destroy workflow, no auto trigger | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/backend/shop/target/` | Local run/build artifacts snapshot (`du -sh` = 8.5M) | DELETE_AFTER_PUSH1 | Maven build output; safe to remove after demo/verification | codex |
+| 2026-02-23 | `/Users/fredz/Downloads/e-commerce/frontend/my-shop-frontend/dist/` | Local run/build artifacts snapshot (`du -sh` = 460K) | DELETE_AFTER_PUSH1 | Vite production build output; safe to remove after demo | codex |
+| 2026-02-23 | `/tmp/ecom_front_resp.html` | Temporary curl response capture for smoke check | DELETE_NOW | Debug temp file; not part of project | codex |
+| 2026-02-23 | `/tmp/ecom_products_resp.json` | Temporary curl response capture for smoke check | DELETE_NOW | Debug temp file; not part of project | codex |
+| 2026-02-23 | `docker build cache` | `docker system df` snapshot (build cache 4.099GB, reclaimable 3.686GB) | DELETE_AFTER_PUSH1 | Use `docker builder prune -af` after demo to reclaim disk | codex |
+| 2026-02-23 | `docker images (e-commerce-*)` | Compose preview images built for local verification | DELETE_AFTER_PUSH1 | Use `docker image rm e-commerce-frontend e-commerce-backend` if no longer needed | codex |
 
 ## Expected Junk/Generated Locations (watch list)
 These are common locations that often become `DELETE_AFTER_PUSH1` if produced only for local verification.
@@ -43,6 +49,9 @@ These are common locations that often become `DELETE_AFTER_PUSH1` if produced on
 | `/Users/fredz/Downloads/e-commerce/backend/shop/target/` | DELETE_AFTER_PUSH1 | Maven build output |
 | `/Users/fredz/Downloads/e-commerce/**/*.log` | DELETE_AFTER_PUSH1 | Runtime/debug logs |
 | `/Users/fredz/Downloads/e-commerce/**/.DS_Store` | DELETE_NOW | macOS metadata file |
+| `/tmp/ecom_*` | DELETE_NOW | Temporary endpoint verification outputs |
+| `docker builder cache` | DELETE_AFTER_PUSH1 | Cleanup command: `docker builder prune -af` |
+| `docker images e-commerce-*` | DELETE_AFTER_PUSH1 | Cleanup command: `docker image rm e-commerce-frontend e-commerce-backend` |
 
 ## Quick Update Workflow
 1. Run `git status --porcelain=v1 -uall`.
