@@ -141,7 +141,7 @@ cd backend/shop
 
 cd ../../frontend/my-shop-frontend
 npm run lint
-npm run test:run
+npm run test:coverage
 npm run build
 ```
 
@@ -150,7 +150,12 @@ npm run build
 GitHub Actions workflow is defined at `.github/workflows/ci.yml` and runs:
 
 - Backend: `./mvnw -q test`
-- Frontend: `npm ci`, `npm run lint`, `npm run test:run`, `npm run build`
+- Frontend: `npm ci`, `npm run lint`, `npm run test:coverage`, `npm run build`
+
+Coverage thresholds enforced in CI:
+
+- Frontend (Vitest): lines/functions/statements >= 30%, branches >= 20%
+- Backend (JaCoCo): line >= 35%, branch >= 20%
 
 Critical E2E workflow is defined at `.github/workflows/e2e.yml` and runs:
 

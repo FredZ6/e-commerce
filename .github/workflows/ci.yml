@@ -26,6 +26,14 @@ jobs:
       - name: Run backend tests
         run: ./mvnw -q test
 
+      - name: Upload backend coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jacoco-report
+          path: backend/shop/target/site/jacoco
+          if-no-files-found: ignore
+
   frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -48,8 +56,16 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Run tests
-        run: npm run test:run
+      - name: Run tests with coverage thresholds
+        run: npm run test:coverage
 
       - name: Build
         run: npm run build
+
+      - name: Upload frontend coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage-report
+          path: frontend/my-shop-frontend/coverage
+          if-no-files-found: ignore

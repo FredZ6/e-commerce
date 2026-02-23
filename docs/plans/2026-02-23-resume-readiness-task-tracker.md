@@ -46,7 +46,7 @@ Acceptance:
 
 ## Task R3: Coverage Gate (Frontend + Backend)
 
-Status: Pending
+Status: Completed
 
 Goal:
 - Add measurable coverage thresholds and enforce them in CI.
@@ -58,6 +58,9 @@ Deliverables:
 
 Acceptance:
 - Coverage reports generated and thresholds enforced.
+- Verified on 2026-02-23 with:
+  - `cd frontend/my-shop-frontend && npm run test:coverage`
+  - `cd backend/shop && ./mvnw -q test` (JaCoCo check bound to test phase)
 
 ---
 
