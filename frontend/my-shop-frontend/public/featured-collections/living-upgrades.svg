@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Living upgrades collection">
+  <defs>
+    <linearGradient id="bgLiving" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f4ef"/>
+      <stop offset="100%" stop-color="#e8dfd3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bgLiving)"/>
+  <rect x="130" y="620" width="940" height="140" rx="18" fill="#d4c6b5"/>
+  <rect x="220" y="350" width="760" height="250" rx="48" fill="#f2ebe2" stroke="#bda98f" stroke-width="12"/>
+  <rect x="300" y="310" width="190" height="80" rx="20" fill="#efe6da"/>
+  <rect x="710" y="310" width="190" height="80" rx="20" fill="#efe6da"/>
+  <rect x="360" y="390" width="480" height="170" rx="24" fill="#e9dfd1"/>
+  <circle cx="250" cy="500" r="46" fill="#b7a289"/>
+  <rect x="240" y="230" width="20" height="220" rx="10" fill="#c2ad92"/>
+  <rect x="820" y="220" width="220" height="14" rx="7" fill="#c9b49a"/>
+  <rect x="820" y="250" width="220" height="14" rx="7" fill="#c9b49a"/>
+  <rect x="820" y="280" width="220" height="14" rx="7" fill="#c9b49a"/>
+</svg>

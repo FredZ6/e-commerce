@@ -47,7 +47,7 @@ async function createProductAsAdmin(request, token, productName) {
       name: productName,
       description: 'E2E seeded product',
       price: 29.99,
-      imageUrl: 'https://images.pexels.com/photos/5077064/pexels-photo-5077064.jpeg?auto=compress&cs=tinysrgb&w=640',
+      imageUrl: '/demo-products/usb-c-hub.svg',
       stock: 12,
       details: 'Seeded by Playwright E2E',
     },

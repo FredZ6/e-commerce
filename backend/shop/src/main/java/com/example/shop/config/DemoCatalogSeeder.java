@@ -37,7 +37,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "Wireless Mouse",
                         "A smooth and responsive wireless mouse.",
                         "19.99",
-                        "https://images.pexels.com/photos/13870518/pexels-photo-13870518.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                        "/demo-products/wireless-mouse.svg",
                         120,
                         "Ergonomic contour with silent click design.\nBluetooth and 2.4G dual mode."
                 ),
@@ -45,7 +45,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "Mechanical Keyboard",
                         "A durable mechanical keyboard with backlight.",
                         "79.99",
-                        "https://images.pexels.com/photos/31497027/pexels-photo-31497027.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                        "/demo-products/mechanical-keyboard.svg",
                         80,
                         "Hot-swappable switches and PBT keycaps.\nCompact layout for productivity."
                 ),
@@ -53,7 +53,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "HD Monitor",
                         "A 24-inch full HD monitor.",
                         "149.99",
-                        "https://images.pexels.com/photos/1714203/pexels-photo-1714203.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                        "/demo-products/hd-monitor.svg",
                         45,
                         "1080p IPS panel with vivid color accuracy.\nIncludes HDMI and DisplayPort."
                 ),
@@ -61,7 +61,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "USB-C Hub",
                         "A compact USB-C hub for daily expansion.",
                         "39.99",
-                        "https://images.pexels.com/photos/7742583/pexels-photo-7742583.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                        "/demo-products/usb-c-hub.svg",
                         95,
                         "Supports 4K HDMI output, USB 3.0, and pass-through charging."
                 ),
@@ -69,7 +69,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "Laptop Stand",
                         "An aluminum stand for ergonomic desk setup.",
                         "34.99",
-                        "https://images.pexels.com/photos/14458078/pexels-photo-14458078.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                        "/demo-products/laptop-stand.svg",
                         110,
                         "Improves airflow and raises screen height to reduce neck strain."
                 ),
@@ -77,7 +77,7 @@ public class DemoCatalogSeeder implements ApplicationRunner {
                         "Noise-Canceling Headphones",
                         "Over-ear headphones with active noise canceling.",
                         "129.99",
-                        "https://images.pexels.com/photos/15372898/pexels-photo-15372898.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                        "/demo-products/noise-canceling-headphones.svg",
                         60,
                         "Up to 30 hours battery life with USB-C fast charging."
                 )
