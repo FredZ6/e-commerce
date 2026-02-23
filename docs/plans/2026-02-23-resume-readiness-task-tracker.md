@@ -1,149 +1,88 @@
-# Resume Readiness Task Tracker (Priority-First)
+# Resume Bonus 6-Task Tracker (Canonical)
 
 Updated: 2026-02-23
 
-## Task R1 (Highest): Public Demo Readiness + Verification
+Use this file as the single source of truth for the "6 resume boost tasks".
+
+Startup rule:
+- Before starting any new task, read this file first:
+  - `sed -n '1,260p' docs/plans/2026-02-23-resume-readiness-task-tracker.md`
+- If another checklist conflicts with this one, this file wins.
+
+## Progress Snapshot
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| 1 | One-click demo deploy proof | Partially Completed | `bca9592`, `a12ed16` |
+| 2 | E2E tests + quality gates | Completed | `8b25d86`, `37e8562`, `2c6d52c` |
+| 3 | Observability (logs/metrics/health) | Completed | `c6585a6` |
+| 4 | Replace external images with controllable assets | Completed | `1656c19`, `8584840` |
+| 5 | Performance + security baseline | Partially Completed | `3342745`, `1bba829`, `326ee81` |
+| 6 | Rewrite README + quantified resume bullets | Partially Completed | `13f5392`, `bca9592`, `2c6d52c` |
+
+## Task 1 - One-Click Demo Deploy Proof
+
+Status: Partially Completed
+
+Done:
+- Manual deploy/destroy workflows and safety guards are in place.
+- Deploy runbook and proof template exist.
+
+Remaining:
+- Run one real `manual-demo-deploy` and one `manual-demo-destroy`.
+- Fill `docs/deploy-proof-template.md` with run URLs.
+- Add real live demo URL and screenshot(s) to `README.md`.
+
+## Task 2 - E2E Tests and Quality Gates
 
 Status: Completed
 
-Goal:
-- Make the project demo-ready for external reviewers with clear entry links, CI badge, and a repeatable smoke check.
+Done:
+- Playwright critical flow covers register/login -> add to cart -> place order -> admin status update.
+- Frontend and backend coverage thresholds are enforced in CI.
 
-Deliverables:
-- README has CI badge + demo section.
-- Dockerized frontend can reach backend in stack mode without manual proxy hacks.
-- `scripts/smoke-demo.sh` validates frontend and backend endpoints.
-- Optional cloud deployment manifest is documented for one-click hosting handoff.
-
-Acceptance:
-- `docker compose up -d --build` succeeds.
-- Frontend entry responds `200`.
-- Backend products endpoint responds `200` through published endpoint.
-- Verified on 2026-02-23 with:
-  - `POSTGRES_HOST_PORT=5435 BACKEND_HOST_PORT=8083 FRONTEND_HOST_PORT=5175 docker compose up -d --build`
-  - `FRONTEND_URL=http://localhost:5175 BACKEND_URL=http://localhost:8083 ./scripts/smoke-demo.sh`
-
----
-
-## Task R2: End-to-End Critical User Journey (Playwright)
+## Task 3 - Observability
 
 Status: Completed
 
-Goal:
-- Add one E2E flow: login -> product browse -> add to cart -> checkout -> order visible.
+Done:
+- Added request ID propagation (`X-Request-Id`) and MDC logging.
+- Added health and metrics exposure with actuator/prometheus endpoints.
+- Added integration tests for health and request ID behavior.
 
-Deliverables:
-- Playwright config + spec.
-- CI job for E2E (or dedicated workflow).
-
-Acceptance:
-- E2E test passes locally and in CI.
-- Verified locally on 2026-02-23 with:
-  - `POSTGRES_HOST_PORT=5436 BACKEND_HOST_PORT=8084 FRONTEND_HOST_PORT=5176 docker compose up -d --build`
-  - `E2E_FRONTEND_URL=http://localhost:5176 E2E_API_URL=http://localhost:8084 npm run e2e`
-
----
-
-## Task R3: Coverage Gate (Frontend + Backend)
+## Task 4 - Replace External Images With Controllable Assets
 
 Status: Completed
 
-Goal:
-- Add measurable coverage thresholds and enforce them in CI.
+Done:
+- Product images are served from repository-controlled static assets.
+- Seeder syncs demo catalog image URLs on startup for stable demos.
+- Home page "Travel Kits" image mapping issue was fixed.
 
-Deliverables:
-- Frontend Vitest coverage config and threshold.
-- Backend JaCoCo report + threshold.
-- CI fails when thresholds are not met.
+## Task 5 - Performance and Security Baseline
 
-Acceptance:
-- Coverage reports generated and thresholds enforced.
-- Verified on 2026-02-23 with:
-  - `cd frontend/my-shop-frontend && npm run test:coverage`
-  - `cd backend/shop && ./mvnw -q test` (JaCoCo check bound to test phase)
+Status: Partially Completed
 
----
+Done:
+- Security baseline exists: role-based guards, login abuse protection, startup secret validation.
+- OpenAPI docs are now published and contract-tested (useful for security checklisting).
 
-## Task R4: Security Hardening for Resume Credibility
+Remaining:
+- Add a reproducible API performance baseline report (load test script + results in docs).
+- Add a concise "authz checklist" doc for critical endpoints and expected roles.
 
-Status: Completed
+## Task 6 - README and Resume Bullets (Quantified)
 
-Goal:
-- Remove weak defaults and tighten runtime safety for production mode.
+Status: Partially Completed
 
-Deliverables:
-- No permissive default JWT secret outside local/test profile.
-- Production logging reduced from debug to safe defaults.
-- Basic login abuse protection (rate limit/lock window) documented and implemented.
+Done:
+- `docs/resume-bullets.md` is quantified and interview-ready.
+- README contains architecture/stack/quality/deploy sections.
 
-Acceptance:
-- App startup fails fast when critical prod secrets are missing.
-- Security regression tests pass.
-- Verified on 2026-02-23 with:
-  - `cd backend/shop && ./mvnw -q -Dtest=SecurityStartupValidatorTest,LoginRateLimitTest test`
-  - `cd backend/shop && ./mvnw -q test`
+Remaining:
+- Replace `TBD` live demo fields in README with actual URLs and credentials (when deployed).
+- Add one short "results" section with measurable outcomes (tests, CI, deployment mode).
 
----
+## Notes
 
-## Task R5: UX Data States + Demo Seed Data
-
-Status: Completed
-
-Goal:
-- Ensure reviewer sees a polished UI with meaningful demo content immediately.
-
-Deliverables:
-- Seeded products for local/demo profile.
-- Better loading/empty/error states in key pages.
-- Stable image fallback behavior.
-
-Acceptance:
-- Fresh environment shows curated products without manual DB edits.
-- Verified on 2026-02-23 with:
-  - `cd backend/shop && ./mvnw -q -Dtest=DemoCatalogSeederTest test`
-  - `cd backend/shop && ./mvnw -q test`
-  - `cd frontend/my-shop-frontend && npm run test:run -- src/test/products/ProductsPageStates.test.jsx`
-  - `cd frontend/my-shop-frontend && npm run lint && npm run test:run && npm run build`
-
----
-
-## Task R6: Resume Bullets with Quantified Impact
-
-Status: Completed
-
-Goal:
-- Rewrite resume bullets to include measurable outcomes and technical depth.
-
-Deliverables:
-- Updated `docs/resume-bullets.md` with numbers (test count, CI, containerization, flows).
-
-Acceptance:
-- Bullets are concise, metric-based, and interview-ready.
-- Verified on 2026-02-23 with:
-  - `rg -n "@Test" backend/shop/src/test/java | wc -l` -> 20 backend tests
-  - `rg -n "\\btest\\(" frontend/my-shop-frontend/src/test frontend/my-shop-frontend/e2e | wc -l` -> 8 frontend/e2e tests
-  - `ls -1 .github/workflows | wc -l` -> 4 workflows (CI, E2E, manual deploy, manual destroy)
-  - `sed -n '1,240p' docs/resume-bullets.md` (content review)
-
----
-
-## Task R7: Manual Cloud Deploy Guardrails (No Always-On Spend)
-
-Status: Completed
-
-Goal:
-- Add click-to-deploy and click-to-destroy cloud demo workflows that never auto-trigger.
-
-Deliverables:
-- Manual deploy workflow (`workflow_dispatch` only).
-- Manual destroy workflow (`workflow_dispatch` only).
-- Remote deploy/destroy scripts with explicit confirm phrase guards.
-- Deploy env template and runbook for cost-safe operation.
-
-Acceptance:
-- No deploy workflows run on push/PR.
-- Deploy and destroy both require explicit safety phrase.
-- Verified on 2026-02-23 with:
-  - `bash -n scripts/cloud/deploy_demo_remote.sh scripts/cloud/destroy_demo_remote.sh`
-  - `ls -1 .github/workflows` includes `manual-demo-deploy.yml` and `manual-demo-destroy.yml`
-  - `rg -n "workflow_dispatch|DEPLOY_DEMO|DESTROY_DEMO" .github/workflows/manual-demo-*.yml docs/manual-cloud-deploy.md`
+- The OpenAPI publishing commit `326ee81` is an extra improvement (not one of the original 6 tasks).
