@@ -47,6 +47,7 @@ class DemoCatalogSeederTest {
                     assertThat(product.getDetails()).isNotBlank();
                     assertThat(product.getStock()).isPositive();
                     assertThat(product.getImageUrl()).startsWith("/demo-products/");
+                    assertThat(product.getImageUrl()).endsWith(".jpg");
                 });
     }
 
@@ -64,7 +65,7 @@ class DemoCatalogSeederTest {
                 "Mechanical Keyboard",
                 "A durable mechanical keyboard with backlight.",
                 "79.99",
-                "/demo-products/mechanical-keyboard.svg",
+                "/demo-products/mechanical-keyboard.jpg",
                 80,
                 "Hot-swappable switches and PBT keycaps.\nCompact layout for productivity."
         );
@@ -80,7 +81,7 @@ class DemoCatalogSeederTest {
         assertThat(syncedProducts).hasSize(5);
         assertThat(syncedProducts).contains(existingMouse);
         assertThat(existingMouse.getImageUrl())
-                .isEqualTo("/demo-products/wireless-mouse.svg");
+                .isEqualTo("/demo-products/wireless-mouse.jpg");
     }
 
     @Test
@@ -90,7 +91,7 @@ class DemoCatalogSeederTest {
                         "Wireless Mouse",
                         "A smooth and responsive wireless mouse.",
                         "19.99",
-                        "/demo-products/wireless-mouse.svg",
+                        "/demo-products/wireless-mouse.jpg",
                         120,
                         "Ergonomic contour with silent click design.\nBluetooth and 2.4G dual mode."
                 ),
@@ -98,7 +99,7 @@ class DemoCatalogSeederTest {
                         "Mechanical Keyboard",
                         "A durable mechanical keyboard with backlight.",
                         "79.99",
-                        "/demo-products/mechanical-keyboard.svg",
+                        "/demo-products/mechanical-keyboard.jpg",
                         80,
                         "Hot-swappable switches and PBT keycaps.\nCompact layout for productivity."
                 ),
@@ -106,7 +107,7 @@ class DemoCatalogSeederTest {
                         "HD Monitor",
                         "A 24-inch full HD monitor.",
                         "149.99",
-                        "/demo-products/hd-monitor.svg",
+                        "/demo-products/hd-monitor.jpg",
                         45,
                         "1080p IPS panel with vivid color accuracy.\nIncludes HDMI and DisplayPort."
                 ),
@@ -114,7 +115,7 @@ class DemoCatalogSeederTest {
                         "USB-C Hub",
                         "A compact USB-C hub for daily expansion.",
                         "39.99",
-                        "/demo-products/usb-c-hub.svg",
+                        "/demo-products/usb-c-hub.jpg",
                         95,
                         "Supports 4K HDMI output, USB 3.0, and pass-through charging."
                 ),
@@ -122,7 +123,7 @@ class DemoCatalogSeederTest {
                         "Laptop Stand",
                         "An aluminum stand for ergonomic desk setup.",
                         "34.99",
-                        "/demo-products/laptop-stand.svg",
+                        "/demo-products/laptop-stand.jpg",
                         110,
                         "Improves airflow and raises screen height to reduce neck strain."
                 ),
@@ -130,7 +131,7 @@ class DemoCatalogSeederTest {
                         "Noise-Canceling Headphones",
                         "Over-ear headphones with active noise canceling.",
                         "129.99",
-                        "/demo-products/noise-canceling-headphones.svg",
+                        "/demo-products/noise-canceling-headphones.jpg",
                         60,
                         "Up to 30 hours battery life with USB-C fast charging."
                 )

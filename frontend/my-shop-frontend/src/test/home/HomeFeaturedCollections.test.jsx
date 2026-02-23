@@ -15,5 +15,6 @@ test('featured collection images should not rely on external hosts', () => {
     const image = screen.getByAltText(name)
     expect(image).toBeInTheDocument()
     expect(image.getAttribute('src')).not.toMatch(/images\.unsplash\.com|images\.pexels\.com/)
+    expect(image.getAttribute('src')).toMatch(/^\/featured-collections\/.+\.jpg$/)
   })
 })

@@ -21,19 +21,19 @@ const featureCollections = [
     id: 'desk',
     name: 'Desk Essentials',
     description: 'Clean silhouettes for productive workspaces.',
-    image: '/featured-collections/desk-essentials.svg',
+    image: '/featured-collections/desk-essentials.jpg',
   },
   {
     id: 'living',
     name: 'Living Upgrades',
     description: 'Elevated textures for everyday comfort.',
-    image: '/featured-collections/living-upgrades.svg',
+    image: '/featured-collections/living-upgrades.jpg',
   },
   {
     id: 'travel',
     name: 'Travel Kits',
     description: 'Designed to move with you in style.',
-    image: '/featured-collections/travel-kits.svg',
+    image: '/featured-collections/travel-kits.jpg',
   },
 ]
 

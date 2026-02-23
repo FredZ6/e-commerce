@@ -30,7 +30,7 @@ const productFixture = {
   name: 'Wireless Mouse',
   description: 'Smooth and responsive',
   price: 19.99,
-  imageUrl: '/demo-products/wireless-mouse.svg',
+  imageUrl: '/demo-products/wireless-mouse.jpg',
 }
 
 test('shows retry action on load failure and recovers after retry', async () => {
